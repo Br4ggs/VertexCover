@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,21 @@ namespace VertexCover
         public MainWindow()
         {
             InitializeComponent();
+            bool[,] matrix = {
+                {false, true, false, false},
+                {true,false, true, false},
+                {false,true, false, true},
+                {false, false, true, false}
+            };
+            try
+            {
+                Uri location = GraphViz.CreateGraphImage("abc", matrix, new[] { "A", "B", "C", "D" });
+                ImageBox.Source = new BitmapImage(location);
+            }
+            catch (Win32Exception e)
+            {
+                Console.WriteLine("Please install GraphViz");
+            }
         }
     }
 }

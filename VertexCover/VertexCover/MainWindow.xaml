@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Image x:Name="ImageBox" HorizontalAlignment="Left" Height="358" Margin="547,46,0,0" VerticalAlignment="Top" Width="234"/>
 
     </Grid>
 </Window>
