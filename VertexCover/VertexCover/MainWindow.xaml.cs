@@ -24,5 +24,29 @@ namespace VertexCover
         {
             InitializeComponent();
         }
+
+        private void GenerateButton_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateWindow generateWindow = new GenerateWindow();
+            generateWindow.ShowDialog();
+
+            GenerateAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
+        }
+
+        private bool[,] GenerateAdjacencyMatrix(int vertices, int edgeProbability)
+        {
+            Random random = new Random();
+            bool[,] matrix = new bool[vertices, vertices];
+
+            for(int i = 0; i < vertices; i++)
+            {
+                for(int j = 0; j < vertices; j++)
+                {
+                    matrix[i, j] = random.Next(0, 101) <= edgeProbability;
+                }
+            }
+
+            return matrix;
+        }
     }
 }
