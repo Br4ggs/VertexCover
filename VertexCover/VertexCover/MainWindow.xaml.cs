@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Linq;
 
 namespace VertexCover
 {
@@ -22,11 +21,14 @@ namespace VertexCover
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MatrixBuilder matrixBuilder = new MatrixBuilder();
         private int imagesGenerated = 0;
 
         public MainWindow()
         {
             InitializeComponent();
+            
+            GenerateDefaultGraph()
         }
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
@@ -34,70 +36,8 @@ namespace VertexCover
             GenerateWindow generateWindow = new GenerateWindow();
             generateWindow.ShowDialog();
 
-            bool[,] matrix = GenerateAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
-            //List<List<int>> subGraphs = FindSubGraphsFromAdjacencyMatrix(matrix);
+            bool[,] matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
             DrawGraph(matrix);
-        }
-
-        private bool[,] GenerateAdjacencyMatrix(int vertices, int edgeProbability)
-        {
-            Random random = new Random();
-            bool[,] matrix = new bool[vertices, vertices];
-
-            for(int i = 0; i < vertices; i++)
-            {
-                for(int j = 0; j < vertices; j++)
-                {
-                    if(i == j)
-                    {
-                        break;
-                    }
-                    matrix[i, j] = random.Next(0, 101) <= edgeProbability;
-                    matrix[j, i] = matrix[i, j];
-                }
-            }
-
-            return matrix;
-        }
-
-        private List<List<int>> FindSubGraphsFromAdjacencyMatrix(bool[,] adjacencyMatrix)
-        {
-            List<List<int>> subGraphs = new List<List<int>>();
-            List<int> nodes = new List<int>(Enumerable.Range(0, adjacencyMatrix.GetLength(0)));
-
-            for(int i = 0; i < nodes.Count; i++)
-            {
-                int currentNode = nodes[i];
-                List<int> currentSubGraph = new List<int>();
-                currentSubGraph.Add(currentNode);
-
-                for(int j = 0; j < currentSubGraph.Count; j++)
-                {
-                    currentNode = currentSubGraph[j];
-                    for (int k = 0; k < adjacencyMatrix.GetLength(1); k++)
-                    {
-                        if (adjacencyMatrix[currentNode, k] && !currentSubGraph.Contains(k)) //todo: replace .contains() with memoization
-                        {
-                            currentSubGraph.Add(k);
-                            nodes.Remove(k);
-                        }
-                    }
-                }
-                subGraphs.Add(currentSubGraph);
-            }
-
-            return subGraphs;
-        }
-
-        private bool[,] ConnectSubGraphsInAdjacencyMatrix(bool[,] adjacencyMatrix, int[][] subGraphs)
-        {
-            for(int i = 0; i < subGraphs.Length - 1; i++)
-            {
-                adjacencyMatrix[subGraphs[i][0],subGraphs[i+1][0]] = true;
-                adjacencyMatrix[subGraphs[i + 1][0], subGraphs[i][0]] = true;
-            }
-
-            return adjacencyMatrix;
         }
 
         private void DrawGraph(bool[,] adjacencyMatrix)
@@ -118,6 +58,18 @@ namespace VertexCover
             {
                 MessageBox.Show("The maximum size has been reached please create a smaller graph");
             }
+        }
+
+        private void GenerateDefaultGraph()
+        {
+            bool[,] matrix = {
+                {false, true, false, false},
+                {true,false, true, false},
+                {false,true, false, true},
+                {false, false, true, false}
+            };
+
+            DrawGraph(matrix);
         }
     }
 }
