@@ -25,21 +25,21 @@ namespace VertexCover
         public MainWindow()
         {
             InitializeComponent();
-            bool[,] matrix = {
-                {false, true, false, false},
-                {true,false, true, false},
-                {false,true, false, true},
-                {false, false, true, false}
-            };
-            try
-            {
-                Uri location = GraphViz.CreateGraphImage("abc", matrix, new[] { "A", "B", "C", "D" });
-                ImageBox.Source = new BitmapImage(location);
-            }
-            catch (Win32Exception e)
-            {
-                Console.WriteLine("Please install GraphViz");
-            }
+            //bool[,] matrix = {
+            //    {false, true, false, false},
+            //    {true,false, true, false},
+            //    {false,true, false, true},
+            //    {false, false, true, false}
+            //};
+            //try
+            //{
+            //    Uri location = GraphViz.CreateGraphImage("abc", adjacencyMatrix, new[] { "A", "B", "C", "D" });
+            //    ImageBox.Source = new BitmapImage(location);
+            //}
+            //catch (Win32Exception e) //todo: fix this into proper error handling later
+            //{
+            //    Console.WriteLine("Please install GraphViz");
+            //}
         }
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
@@ -48,7 +48,8 @@ namespace VertexCover
             generateWindow.ShowDialog();
 
             bool[,] matrix = GenerateAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
-            List<List<int>> subGraphs = FindSubGraphsFromAdjacencyMatrix(matrix);
+            //List<List<int>> subGraphs = FindSubGraphsFromAdjacencyMatrix(matrix);
+            DrawGraph(matrix);
         }
 
         private bool[,] GenerateAdjacencyMatrix(int vertices, int edgeProbability)
@@ -88,7 +89,7 @@ namespace VertexCover
                     currentNode = currentSubGraph[j];
                     for (int k = 0; k < adjacencyMatrix.GetLength(1); k++)
                     {
-                        if (adjacencyMatrix[currentNode, k] && !currentSubGraph.Contains(k))
+                        if (adjacencyMatrix[currentNode, k] && !currentSubGraph.Contains(k)) //todo: replace .contains() with memoization
                         {
                             currentSubGraph.Add(k);
                             nodes.Remove(k);
@@ -110,6 +111,16 @@ namespace VertexCover
             }
 
             return adjacencyMatrix;
+        }
+
+        private void DrawGraph(bool[,] adjacencyMatrix)
+        {
+            string[] names = Enumerable.Range(1, adjacencyMatrix.GetLength(0))
+                                .Select(num => num.ToString())
+                                .ToArray();
+
+            Uri location = GraphViz.CreateGraphImage("graph", adjacencyMatrix, names);
+            ImageBox.Source = new BitmapImage(location);
         }
     }
 }
