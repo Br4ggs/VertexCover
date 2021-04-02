@@ -8,6 +8,6 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button Content="Generate new Graph" HorizontalAlignment="Left" Height="29" Margin="10,10,0,0" VerticalAlignment="Top" Width="156" Click="GenerateButton_Click"/>
-        <Image x:Name="ImageBox" HorizontalAlignment="Left" Height="358" Margin="547,46,0,0" VerticalAlignment="Top" Width="234"/>
+        <Image x:Name="ImageBox" HorizontalAlignment="Left" Height="380" Margin="192,24,0,0" VerticalAlignment="Top" Width="589"/>
     </Grid>
 </Window>

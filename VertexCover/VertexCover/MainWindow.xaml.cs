@@ -27,8 +27,8 @@ namespace VertexCover
         public MainWindow()
         {
             InitializeComponent();
-            
-            GenerateDefaultGraph()
+
+            GenerateDefaultGraph();
         }
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
