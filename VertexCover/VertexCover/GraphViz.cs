@@ -18,19 +18,22 @@ namespace VertexCover
         /// <returns>The created images</returns>
         public static Uri CreateGraphImage(string name, bool[,] adjacencyMatrix, string[] names)
         {
-            CreateDotFile($"{name}.dot", adjacencyMatrix, names);
+            bool[,] copyMatrix = (bool[,])adjacencyMatrix.Clone();
+
+            string imageFileName = $"{name}.png";
+            CreateDotFile($"{name}.dot", copyMatrix, names);
             Process dot = new Process
             {
                 StartInfo =
                 {
                     //TODO Fix
-                    FileName = @"C:\Program Files\Graphviz\bin\dot.exe", Arguments = $"-T png -o {name}.png {name}.dot"
+                    FileName = @"C:\Program Files\Graphviz\bin\dot.exe", Arguments = $"-T png -o {imageFileName} {name}.dot"
                 }
             };
 
             dot.Start();
             dot.WaitForExit();
-            return new Uri(@$"{Directory.GetCurrentDirectory()}/{name}.png");
+            return new Uri(@$"{Directory.GetCurrentDirectory()}/{imageFileName}");
         }
 
         /// <summary>
