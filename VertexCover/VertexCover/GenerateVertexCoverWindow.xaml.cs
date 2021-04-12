@@ -19,6 +19,7 @@ namespace VertexCover
     /// </summary>
     public partial class GenerateVertexCoverWindow : Window
     {
+        public bool Completed { get; private set; }
         public int Nodes { get; private set; }
         public bool[] VertexCover { get; private set; }
 
@@ -26,6 +27,7 @@ namespace VertexCover
 
         public GenerateVertexCoverWindow(bool[,] adjacencyMatrix)
         {
+            Completed = false;
             Nodes = 0;
             VertexCover = new bool[0];
             this.adjacencyMatrix = adjacencyMatrix;
@@ -48,6 +50,7 @@ namespace VertexCover
             //show loading screen
             Graph graph = new Graph(adjacencyMatrix);
             VertexCover = VertexCoverUtils.GetVertexCover(graph, Convert.ToUInt32(Nodes));
+            Completed = true;
             Close();
         }
     }
