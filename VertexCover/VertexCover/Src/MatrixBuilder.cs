@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace VertexCover
 {
-    class MatrixBuilder
+    public class MatrixBuilder
     {
         private Random random = new Random();
 
