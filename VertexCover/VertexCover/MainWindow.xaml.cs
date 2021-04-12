@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using VertexCover.Src.GraphViz;
 
 namespace VertexCover
 {
@@ -59,12 +60,18 @@ namespace VertexCover
 
         private void DrawGraph(bool[,] adjacencyMatrix)
         {
-            string[] names = Enumerable.Range(1, adjacencyMatrix.GetLength(0))
-                .Select(num => num.ToString())
-                .ToArray();
+
+            Graph graph = new Graph(adjacencyMatrix);
+            GraphVizAttributes attributes =
+                new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
+
+            for (int i = 0; i < graph.Vertices.Count; i++)
+            {
+                attributes.AddAttribute(graph.Vertices.ElementAt(i), new Tuple<string, string>("label", i.ToString()));
+            }
             try
             {
-                Uri location = GraphViz.CreateGraphImage($"graph{imagesGenerated++}", adjacencyMatrix, names);
+                Uri location = GraphViz.CreateGraphImage($"graph{imagesGenerated++}", graph, attributes);
                 ImageBox.Source = new BitmapImage(location);
             }
             catch (Win32Exception)
