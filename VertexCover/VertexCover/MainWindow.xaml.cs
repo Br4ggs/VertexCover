@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -12,9 +13,11 @@ namespace VertexCover
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MatrixBuilder matrixBuilder = new MatrixBuilder();
+        private readonly MatrixBuilder matrixBuilder = new MatrixBuilder();
         private int imagesGenerated = 0;
         private bool[,] matrix = new bool[0, 0];
+        private Graph graph;
+        private GraphVizAttributes attributes;
 
         public MainWindow()
         {
@@ -32,7 +35,9 @@ namespace VertexCover
                 return;
 
             matrix = generateWindow.Matrix;
-            DrawGraph(matrix);
+            graph = new Graph(matrix);
+            GenerateAttributes();
+            DrawGraph(graph, attributes);
         }
 
         private void GenerateVertexCoverButton_Click(object sender, RoutedEventArgs e)
@@ -45,35 +50,42 @@ namespace VertexCover
 
             bool[] vertexCover = generateVertexCoverWindow.VertexCover;
 
-            if(vertexCover == null)
+            if (vertexCover == null)
             {
                 VertexCoverOutput.Text = "No suitable vertex cover could be found";
                 return;
             }
 
             string edges = "";
-            for(int i = 0; i < vertexCover.Length; i++)
+            for (int i = 0; i < vertexCover.Length; i++)
             {
-                if(vertexCover[i])
+                if (vertexCover[i])
                 {
-                    edges += i+1 + " ";
+                    edges += i + " ";
                 }
             }
 
+            GenerateAttributes();
+            // Apply colors to vertex cover
+            for (int i = 0; i < vertexCover.Length; i++)
+            {
+                if (vertexCover[i])
+                {
+                    attributes.AddAttribute(graph.Vertices.ElementAt(i), new Tuple<string, string>("color", "green"));
+                }
+            }
+
+            foreach (var edge in graph.Edges)
+            {
+                attributes.AddAttribute(edge, new Tuple<string, string>("color", "green"));
+            }
+
             VertexCoverOutput.Text = "Vertices: " + edges + "form biggest vertex cover for graph";
+            DrawGraph(graph, attributes);
         }
 
-        private void DrawGraph(bool[,] adjacencyMatrix)
+        private void DrawGraph(Graph graph, GraphVizAttributes attributes)
         {
-
-            Graph graph = new Graph(adjacencyMatrix);
-            GraphVizAttributes attributes =
-                new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
-
-            for (int i = 0; i < graph.Vertices.Count; i++)
-            {
-                attributes.AddAttribute(graph.Vertices.ElementAt(i), new Tuple<string, string>("label", i.ToString()));
-            }
             try
             {
                 Uri location = GraphViz.CreateGraphImage($"graph{imagesGenerated++}", graph, attributes);
@@ -89,11 +101,23 @@ namespace VertexCover
             }
         }
 
+        private void GenerateAttributes()
+        {
+            attributes =
+                new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
+
+            for (int i = 0; i < graph.Vertices.Count; i++)
+            {
+                attributes.AddAttribute(graph.Vertices.ElementAt(i), new Tuple<string, string>("label", i.ToString()));
+            }
+        }
+
         private void GenerateDefaultGraph()
         {
             matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50);
-
-            DrawGraph(matrix);
+            graph = new Graph(matrix);
+            GenerateAttributes();
+            DrawGraph(graph, attributes);
         }
     }
 }
