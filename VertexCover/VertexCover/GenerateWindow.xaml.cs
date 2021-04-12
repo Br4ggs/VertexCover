@@ -14,10 +14,15 @@ namespace VertexCover
         public int Nodes { get; private set; }
         public int Density { get; private set; }
 
-        public GenerateWindow()
+        public bool[,] Matrix { get; private set; }
+
+        private MatrixBuilder matrixBuilder;
+
+        public GenerateWindow(MatrixBuilder matrixBuilder)
         {
             Nodes = 0;
             Density = 0;
+            this.matrixBuilder = matrixBuilder;
             InitializeComponent();
         }
 
@@ -39,8 +44,8 @@ namespace VertexCover
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
+            Matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(Nodes, Density);
             Close();
         }
-
     }
 }

@@ -15,6 +15,7 @@ namespace VertexCover
         private int imagesGenerated = 0;
         private bool[,] matrix = new bool[0, 0];
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -24,7 +25,7 @@ namespace VertexCover
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            GenerateWindow generateWindow = new GenerateWindow();
+            GenerateWindow generateWindow = new GenerateWindow(matrixBuilder);
             generateWindow.ShowDialog();
 
             matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
