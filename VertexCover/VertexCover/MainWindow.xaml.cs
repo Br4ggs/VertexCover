@@ -15,7 +15,6 @@ namespace VertexCover
         private int imagesGenerated = 0;
         private bool[,] matrix = new bool[0, 0];
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -23,12 +22,12 @@ namespace VertexCover
             GenerateDefaultGraph();
         }
 
-        private void GenerateButton_Click(object sender, RoutedEventArgs e)
+        private void GenerateGraphButton_Click(object sender, RoutedEventArgs e)
         {
             GenerateWindow generateWindow = new GenerateWindow(matrixBuilder);
             generateWindow.ShowDialog();
 
-            matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
+            matrix = generateWindow.Matrix;
             DrawGraph(matrix);
         }
 
@@ -38,7 +37,6 @@ namespace VertexCover
             generateVertexCoverWindow.ShowDialog();
 
             bool[] vertexCover = generateVertexCoverWindow.VertexCover;
-            int nodes = generateVertexCoverWindow.Nodes;
 
             if(vertexCover == null)
             {
@@ -80,12 +78,7 @@ namespace VertexCover
 
         private void GenerateDefaultGraph()
         {
-            bool[,] matrix = {
-                {false, true, false, false},
-                {true,false, true, false},
-                {false,true, false, true},
-                {false, false, true, false}
-            };
+            matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50);
 
             DrawGraph(matrix);
         }
