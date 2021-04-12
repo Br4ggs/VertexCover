@@ -13,6 +13,7 @@ namespace VertexCover
     {
         private MatrixBuilder matrixBuilder = new MatrixBuilder();
         private int imagesGenerated = 0;
+        private bool[,] matrix = new bool[0, 0];
 
         public MainWindow()
         {
@@ -26,8 +27,34 @@ namespace VertexCover
             GenerateWindow generateWindow = new GenerateWindow();
             generateWindow.ShowDialog();
 
-            bool[,] matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
+            matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(generateWindow.Nodes, generateWindow.Density);
             DrawGraph(matrix);
+        }
+
+        private void GenerateVertexCoverButton_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateVertexCoverWindow generateVertexCoverWindow = new GenerateVertexCoverWindow(matrix);
+            generateVertexCoverWindow.ShowDialog();
+
+            bool[] vertexCover = generateVertexCoverWindow.VertexCover;
+            int nodes = generateVertexCoverWindow.Nodes;
+
+            if(vertexCover == null)
+            {
+                VertexCoverOutput.Text = "No suitable vertex cover could be found";
+                return;
+            }
+
+            string edges = "";
+            for(int i = 0; i < vertexCover.Length; i++)
+            {
+                if(vertexCover[i])
+                {
+                    edges += i+1 + " ";
+                }
+            }
+
+            VertexCoverOutput.Text = "Vertices: " + edges + "form biggest vertex cover for graph";
         }
 
         private void DrawGraph(bool[,] adjacencyMatrix)
