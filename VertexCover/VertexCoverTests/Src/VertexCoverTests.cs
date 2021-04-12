@@ -6,7 +6,7 @@ namespace VertexCover.Tests
     [TestClass()]
     public class VertexCoverTests
     {
-        private bool[,] adjacencyMatrix =
+        private readonly bool[,] adjacencyMatrix =
         {
             { false, true, false, false, false, false, false},
             { true, false, true, false, false, false, false},
@@ -63,6 +63,25 @@ namespace VertexCover.Tests
         }
 
         [TestMethod()]
+        public void GetVertexCoverAllVertices()
+        {
+            bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count);
+            bool[] answer =
+            {
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+            };
+
+            CollectionAssert.AreEqual(cover, answer);
+        }
+
+
+        [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible()
         {
             bool[] cover = VertexCoverUtils.GetVertexCover(graph, 1);
@@ -82,7 +101,7 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_LargerSizeThanGraph()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count);
+            bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count + 1);
             Assert.AreEqual(cover, null);
         }
     }
