@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Markup.Localizer;
 using VertexCover.Src;
 
 namespace VertexCover
@@ -32,9 +33,14 @@ namespace VertexCover
             if (cover.Length <= depth)
                 return false;
 
-            if (cover.Count(value => value) == requestSize)
+            int values = cover.Count(value => value);
+            if (values == requestSize)
             {
                 return Validate(graph, cover);
+            }
+            else if (values > requestSize)
+            {
+                return false;
             }
 
             cover[depth] = true;
