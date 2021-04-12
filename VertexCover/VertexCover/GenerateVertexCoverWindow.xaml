@@ -1,0 +1,14 @@
+﻿<Window x:Class="VertexCover.GenerateVertexCoverWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VertexCover"
+        mc:Ignorable="d"
+        Title="GenerateVertexCoverWindow" Height="225" Width="400">
+    <Grid>
+        <TextBlock HorizontalAlignment="Center" Margin="0,27,0,0" Text="Enter number of nodes:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="NodesTextBox" HorizontalAlignment="Center" Height="24" Margin="0,48,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" TextAlignment="Center" PreviewTextInput="NodesTextBox_PreviewTextInput" TextChanged="NodesTextBox_TextChanged"/>
+        <Button Name="ConfirmButton"  Content="Generate" HorizontalAlignment="Left" Margin="158,149,0,0" Width="88" Click="ConfirmButton_Click" Height="28" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
