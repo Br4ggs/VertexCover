@@ -9,8 +9,9 @@ namespace VertexCover
     /// <summary>
     /// Interaction logic for GenerateWindow.xaml
     /// </summary>
-    public partial class GenerateWindow : Window
+    public partial class GenerateMatrixWindow : Window
     {
+        public bool Completed { get; private set; }
         public int Nodes { get; private set; }
         public int Density { get; private set; }
 
@@ -18,8 +19,9 @@ namespace VertexCover
 
         private MatrixBuilder matrixBuilder;
 
-        public GenerateWindow(MatrixBuilder matrixBuilder)
+        public GenerateMatrixWindow(MatrixBuilder matrixBuilder)
         {
+            Completed = false;
             Nodes = 0;
             Density = 0;
             this.matrixBuilder = matrixBuilder;
@@ -45,6 +47,7 @@ namespace VertexCover
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             Matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(Nodes, Density);
+            Completed = true;
             Close();
         }
     }

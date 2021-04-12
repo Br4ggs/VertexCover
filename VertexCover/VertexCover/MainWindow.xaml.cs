@@ -24,8 +24,11 @@ namespace VertexCover
 
         private void GenerateGraphButton_Click(object sender, RoutedEventArgs e)
         {
-            GenerateWindow generateWindow = new GenerateWindow(matrixBuilder);
+            GenerateMatrixWindow generateWindow = new GenerateMatrixWindow(matrixBuilder);
             generateWindow.ShowDialog();
+
+            if (!generateWindow.Completed)
+                return;
 
             matrix = generateWindow.Matrix;
             DrawGraph(matrix);
@@ -35,6 +38,9 @@ namespace VertexCover
         {
             GenerateVertexCoverWindow generateVertexCoverWindow = new GenerateVertexCoverWindow(matrix);
             generateVertexCoverWindow.ShowDialog();
+
+            if (!generateVertexCoverWindow.Completed)
+                return;
 
             bool[] vertexCover = generateVertexCoverWindow.VertexCover;
 
