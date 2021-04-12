@@ -1,8 +1,9 @@
 ﻿using System;
+using VertexCover.Src.Graph;
 
 namespace VertexCover
 {
-    public class Edge
+    public class Edge : IGraphElement
     {
         public Vertex StartVertex { get; }
         public Vertex EndVertex { get; }

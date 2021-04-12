@@ -6,7 +6,7 @@ namespace VertexCover.Tests
     [TestClass()]
     public class VertexCoverTests
     {
-        private bool[,] adjacencyMatrix =
+        private readonly bool[,] adjacencyMatrix =
         {
             { false, true, false, false, false, false, false},
             { true, false, true, false, false, false, false},
@@ -27,7 +27,7 @@ namespace VertexCover.Tests
 
 
         [TestMethod()]
-        public void GetVertexCover()
+        public void GetVertexCoverSizeThree()
         {
             bool[] cover = VertexCoverUtils.GetVertexCover(graph, 3);
             bool[] answer =
@@ -44,11 +44,64 @@ namespace VertexCover.Tests
             CollectionAssert.AreEqual(cover, answer);
         }
 
+        [TestMethod()]
+        public void GetVertexCoverSizeFour()
+        {
+            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 4);
+            bool[] answer =
+            {
+                true,
+                true,
+                false,
+                true,
+                true,
+                false,
+                false
+            };
+
+            CollectionAssert.AreEqual(cover, answer);
+        }
 
         [TestMethod()]
-        public void GetVertexCoverThatIsNotPossible()
+        public void GetVertexCoverAllVertices()
         {
             bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count);
+            bool[] answer =
+            {
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true
+            };
+
+            CollectionAssert.AreEqual(cover, answer);
+        }
+
+
+        [TestMethod()]
+        public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible()
+        {
+            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 1);
+
+            CollectionAssert.AreEqual(cover, null);
+        }
+
+        [TestMethod()]
+        public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible_Size2()
+        {
+            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 2);
+
+            CollectionAssert.AreEqual(cover, null);
+        }
+
+
+        [TestMethod()]
+        public void GetVertexCoverThatIsNotPossible_LargerSizeThanGraph()
+        {
+            bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count + 1);
             Assert.AreEqual(cover, null);
         }
     }

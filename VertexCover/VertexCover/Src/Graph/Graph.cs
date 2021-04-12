@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace VertexCover.Src
+namespace VertexCover
 {
     public class Graph
     {
@@ -12,6 +12,10 @@ namespace VertexCover.Src
         public IReadOnlyCollection<Vertex> Vertices => vertices;
         private readonly List<Vertex> vertices;
 
+        /// <summary>
+        /// Generate Graph from adjacencyMatrix
+        /// </summary>
+        /// <param name="adjacencyMatrix">The adjacencyMatrix that you want to create a graph with</param>
         public Graph(bool[,] adjacencyMatrix)
         {
             int size = adjacencyMatrix.GetLength(0);
@@ -19,6 +23,7 @@ namespace VertexCover.Src
             {
                 throw new ArgumentException($"{nameof(adjacencyMatrix)} can only be the same height and width");
             }
+
             edges = new List<Edge>();
             vertices = new List<Vertex>();
             CreateVertices(size);
@@ -60,18 +65,28 @@ namespace VertexCover.Src
         /// <returns>True if the two vertices are connected</returns>
         public bool AreConnected(Vertex vertex, Vertex otherVertex)
         {
-            return Edges.Any(edge => (edge.StartVertex == vertex && edge.EndVertex == otherVertex) ||
-                                     (edge.StartVertex == otherVertex && edge.EndVertex == vertex));
+            return Edges.Any(edge => (Equals(edge.StartVertex, vertex) && Equals(edge.EndVertex, otherVertex)) ||
+                                     (Equals(edge.StartVertex, otherVertex) && Equals(edge.EndVertex, vertex)));
         }
 
+        /// <summary>
+        /// From a vertex get all edges that go to or start at this vertex
+        /// </summary>
+        /// <param name="vertex">The vertex you want to check with</param>
+        /// <returns>All adjacent edges</returns>
         public IEnumerable<Edge> GetEdges(Vertex vertex)
         {
-            return Edges.Where(edge => edge.StartVertex == vertex || edge.EndVertex == vertex);
+            return Edges.Where(edge => Equals(edge.StartVertex, vertex) || Equals(edge.EndVertex, vertex));
         }
 
+        /// <summary>
+        /// From a vertex get all edges that start at this vertex
+        /// </summary>
+        /// <param name="vertex">The vertex you want to check with</param>
+        /// <returns>All adjacent edges</returns>
         public IEnumerable<Edge> GetEdgesStartingHere(Vertex vertex)
         {
-            return Edges.Where(edge => edge.StartVertex == vertex);
+            return Edges.Where(edge => Equals(edge.StartVertex, vertex));
         }
     }
 }

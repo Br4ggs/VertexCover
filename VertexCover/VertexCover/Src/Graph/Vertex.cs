@@ -1,6 +1,8 @@
-﻿namespace VertexCover
+﻿using VertexCover.Src.Graph;
+
+namespace VertexCover
 {
-    public class Vertex
+    public class Vertex : IGraphElement
     {
         public int ID { get; }
 
