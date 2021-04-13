@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VertexCover.Src;
 
 namespace VertexCover.Tests
@@ -29,17 +30,13 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverSizeThree()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 3);
-            bool[] answer =
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 3);
+            Stack<Vertex> answer = new Stack<Vertex>(new Vertex[]
             {
-                false,
-                true,
-                false,
-                true,
-                true,
-                false,
-                false
-            };
+                new Vertex(1),
+                new Vertex(3),
+                new Vertex(4)
+            });
 
             CollectionAssert.AreEqual(cover, answer);
         }
@@ -47,17 +44,14 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverSizeFour()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 4);
-            bool[] answer =
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 4);
+            Stack<Vertex> answer = new Stack<Vertex>(new Vertex[]
             {
-                true,
-                true,
-                false,
-                true,
-                true,
-                false,
-                false
-            };
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(4),
+                new Vertex(5)
+            });
 
             CollectionAssert.AreEqual(cover, answer);
         }
@@ -65,17 +59,17 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverAllVertices()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count);
-            bool[] answer =
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count);
+            Stack<Vertex> answer = new Stack<Vertex>(new Vertex[]
             {
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-                true
-            };
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(2),
+                new Vertex(3),
+                new Vertex(4),
+                new Vertex(5),
+                new Vertex(6),
+            });
 
             CollectionAssert.AreEqual(cover, answer);
         }
@@ -84,7 +78,7 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 1);
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 1);
 
             CollectionAssert.AreEqual(cover, null);
         }
@@ -92,7 +86,7 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible_Size2()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, 2);
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 2);
 
             CollectionAssert.AreEqual(cover, null);
         }
@@ -101,7 +95,7 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_LargerSizeThanGraph()
         {
-            bool[] cover = VertexCoverUtils.GetVertexCover(graph, (uint)graph.Vertices.Count + 1);
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count + 1);
             Assert.AreEqual(cover, null);
         }
     }

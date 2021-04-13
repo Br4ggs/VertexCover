@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace VertexCover
             if (!generateVertexCoverWindow.Completed)
                 return;
 
-            bool[] vertexCover = generateVertexCoverWindow.VertexCover;
+            Stack<Vertex> vertexCover = generateVertexCoverWindow.VertexCover;
 
             if (vertexCover == null)
             {
@@ -56,23 +57,12 @@ namespace VertexCover
                 return;
             }
 
-            string edges = "";
-            for (int i = 0; i < vertexCover.Length; i++)
-            {
-                if (vertexCover[i])
-                {
-                    edges += i + " ";
-                }
-            }
+            string edges = vertexCover.Aggregate("", (current, vertex) => current + (vertex.ID + " "));
 
             GenerateAttributes();
-            // Apply colors to vertex cover
-            for (int i = 0; i < vertexCover.Length; i++)
+            foreach (var vertex in vertexCover)
             {
-                if (vertexCover[i])
-                {
-                    attributes.AddAttribute(graph.Vertices.ElementAt(i), new Tuple<string, string>("color", "green"));
-                }
+                attributes.AddAttribute(vertex, new Tuple<string, string>("color", "green"));
             }
 
             foreach (var edge in graph.Edges)
