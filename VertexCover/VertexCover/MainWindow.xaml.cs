@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using VertexCover.Src.Graph;
 using VertexCover.Src.GraphViz;
 using VertexCover.Utils;
 
@@ -21,7 +25,7 @@ namespace VertexCover
         private Graph graph;
         private GraphVizAttributes attributes;
         private Random random = new Random();
-
+        private uint kSize = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -62,15 +66,8 @@ namespace VertexCover
             string edges = vertexCover.Aggregate("", (current, vertex) => current + (vertex.ID + " "));
 
             GenerateAttributes();
-            foreach (var vertex in vertexCover)
-            {
-                attributes.AddAttribute(vertex, new Tuple<string, string>("color", "green"));
-            }
-
-            foreach (var edge in graph.Edges)
-            {
-                attributes.AddAttribute(edge, new Tuple<string, string>("color", "green"));
-            }
+            ColorValues(vertexCover, Color.Green);
+            ColorValues(graph.Edges, Color.Green);
 
             VertexCoverOutput.Text = "Vertices: " + edges + "form biggest vertex cover for graph";
             DrawGraph(graph, attributes);
@@ -114,39 +111,88 @@ namespace VertexCover
 
         private void AddTopVertex_Click(object sender, RoutedEventArgs e)
         {
-
+            IEnumerable<Vertex> vertices = graph.Vertices.Where(vertex => graph.GetEdges(vertex).Count() < kSize);
+            TransformVertexDegree(vertices, $"All vertices have more than {kSize} elements", (int)kSize);
         }
 
         private void RemoveTopVertex_Click(object sender, RoutedEventArgs e)
         {
-
+            IEnumerable<Vertex> vertices = graph.GetVerticesSetWithHigherThanEdgeCount((int)kSize);
+            TransformVertexDegree(vertices, "This graph has no top vertices", 1);
         }
 
         private void AddPendent_Click(object sender, RoutedEventArgs e)
         {
             IEnumerable<Vertex> vertices = graph.Vertices.Where(vertex => graph.GetEdges(vertex).Count() != 1);
-            if (!vertices.Any())
-            {
-                VertexCoverOutput.Text = "This graph has only pendent vertices";
-                return;
-            }
-
-            Vertex vertex = vertices.ElementAt(random.Next(vertices.Count()));
-            VertexUtils.TransformVertexWeight(graph, vertex, 1);
-            DrawGraph(graph, attributes);
+            TransformVertexDegree(vertices, "This graph has only pendent vertices", 1);
         }
 
         private void RemovePendent_Click(object sender, RoutedEventArgs e)
         {
             IEnumerable<Vertex> vertices = graph.GetPendentVertices();
+            TransformVertexDegree(vertices, "This graph has no pendent vertices", 2);
+        }
+
+        private void TransformVertexDegree(IEnumerable<Vertex> vertices, string failedMessage, int edges)
+        {
             if (!vertices.Any())
             {
-                VertexCoverOutput.Text = "This graph has no pendent vertices";
+                VertexCoverOutput.Text = failedMessage;
                 return;
             }
             Vertex vertex = vertices.ElementAt(random.Next(vertices.Count()));
-            VertexUtils.TransformVertexWeight(graph, vertex, 2);
+            VertexUtils.TransformVertexDegree(graph, vertex, (uint)edges);
             DrawGraph(graph, attributes);
         }
+
+        private void NodesTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void NodesTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (uint.TryParse((sender as TextBox)?.Text, out var value))
+                kSize = value;
+        }
+
+        private void ColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColorKernelization();
+            DrawGraph(graph, attributes);
+        }
+
+        private void ColorKernelization()
+        {
+            GenerateAttributes();
+            IEnumerable<Vertex> pendents = graph.GetPendentVertices();
+            List<Vertex> vertices = new List<Vertex>();
+            foreach (var pendent in pendents)
+            {
+                var edges = graph.GetEdges(pendent);
+                foreach (var edge in edges)
+                {
+                    vertices.Add(edge.StartVertex);
+                    vertices.Add(edge.EndVertex);
+                }
+            }
+            ColorValues(vertices.Distinct(), Color.Blue);
+            ColorValues(graph.GetVerticesSetWithHigherThanEdgeCount((int)kSize), Color.Red);
+
+            ColorValues(graph.GetIndependentVerticesSet(), Color.Green);
+        }
+
+        private void ColorValues(IEnumerable<IGraphElement> elements, Color color)
+        {
+            string colorString = color.Name.ToLower();
+
+            foreach (var element in elements)
+            {
+                attributes.AddAttribute(element, new Tuple<string, string>("color", colorString));
+            }
+        }
+
+
     }
 }

@@ -8,7 +8,7 @@ namespace VertexCover.Utils
     {
         private static readonly Random random = new Random();
 
-        public static void TransformVertexWeight(Graph graph, Vertex vertex, uint value)
+        public static void TransformVertexDegree(Graph graph, Vertex vertex, uint value)
         {
             IEnumerable<Edge> adjacentEdges = graph.GetEdges(vertex);
             var edges = adjacentEdges as Edge[] ?? adjacentEdges.ToArray();
