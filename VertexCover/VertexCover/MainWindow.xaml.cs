@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using VertexCover.Src.GraphViz;
+using VertexCover.Utils;
 
 namespace VertexCover
 {
@@ -129,23 +130,9 @@ namespace VertexCover
                 VertexCoverOutput.Text = "This graph has only pendent vertices";
                 return;
             }
+
             Vertex vertex = vertices.ElementAt(random.Next(vertices.Count()));
-
-            IEnumerable<Edge> adjacentEdges = graph.GetEdges(vertex);
-            var edges = adjacentEdges as Edge[] ?? adjacentEdges.ToArray();
-
-            if (edges.Length > 0)
-            {
-                for (int i = 0; i < edges.Count() - 1; i++)
-                {
-                    graph.RemoveEdge(edges[i]);
-                }
-            }
-            else
-            {
-                Edge edge = new Edge(graph.Vertices.ElementAt(random.Next(graph.Vertices.Count)), vertex);
-                graph.AddEdge(edge);
-            }
+            VertexUtils.TransformVertexWeight(graph, vertex, 1);
             DrawGraph(graph, attributes);
         }
 
@@ -158,8 +145,7 @@ namespace VertexCover
                 return;
             }
             Vertex vertex = vertices.ElementAt(random.Next(vertices.Count()));
-            Edge edge = new Edge(graph.Vertices.ElementAt(random.Next(graph.Vertices.Count)), vertex);
-            graph.AddEdge(edge);
+            VertexUtils.TransformVertexWeight(graph, vertex, 2);
             DrawGraph(graph, attributes);
         }
     }
