@@ -37,12 +37,14 @@ namespace VertexCover
                         break;
                     }
 
-                    if (adjacencyMatrix[i, j])
-                    {
-                        edges.Add(new Edge(vertices[j], vertices[i]));
-                    }
+                    if (!adjacencyMatrix[i, j])
+                        continue;
+
+                    edges.Add(new Edge(vertices[j], vertices[i]));
                 }
             }
+
+
         }
 
         /// <summary>
@@ -87,6 +89,33 @@ namespace VertexCover
         public IEnumerable<Edge> GetEdgesStartingHere(Vertex vertex)
         {
             return Edges.Where(edge => Equals(edge.StartVertex, vertex));
+        }
+
+        /// <summary>
+        /// Get a set of all vertices that are independent
+        /// </summary>
+        /// <returns>The independent vertices set</returns>
+        public IEnumerable<Vertex> GetIndependentVerticesSet()
+        {
+            return Vertices.Where(vertex => !GetEdges(vertex).Any());
+        }
+
+        /// <summary>
+        /// Get a set of all vertices with a specific amount of edges
+        /// </summary>
+        /// <returns>The set of all vertices who satisfies the values</returns>
+        public IEnumerable<Vertex> GetVerticesSetWithEdgeCount(int edgeCount)
+        {
+            return Vertices.Where(vertex => GetEdges(vertex).Count() == edgeCount);
+        }
+
+        /// <summary>
+        /// Remove a specific edge
+        /// </summary>
+        /// <param name="edge">The edge you want to delete</param>
+        public void RemoveEdge(Edge edge)
+        {
+            edges.Remove(edge);
         }
     }
 }
