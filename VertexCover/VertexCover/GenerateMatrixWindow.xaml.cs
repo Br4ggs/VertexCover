@@ -35,7 +35,8 @@ namespace VertexCover
         }
         private void NodesTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Nodes = Int32.Parse((sender as TextBox).Text);
+            if (int.TryParse((sender as TextBox)?.Text, out var value))
+                Nodes = value;
         }
 
         private void DensitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
