@@ -19,6 +19,7 @@ namespace VertexCover
         private bool[,] matrix = new bool[0, 0];
         private Graph graph;
         private GraphVizAttributes attributes;
+        private Random random = new Random();
 
         public MainWindow()
         {
@@ -107,6 +108,58 @@ namespace VertexCover
             matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50);
             graph = new Graph(matrix);
             GenerateAttributes();
+            DrawGraph(graph, attributes);
+        }
+
+        private void AddTopVertex_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RemoveTopVertex_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddPendent_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<Vertex> vertices = graph.Vertices.Where(vertex => graph.GetEdges(vertex).Count() != 1);
+            if (!vertices.Any())
+            {
+                VertexCoverOutput.Text = "This graph has only pendent vertices";
+                return;
+            }
+            Vertex vertex = vertices.ElementAt(random.Next(vertices.Count()));
+
+            IEnumerable<Edge> adjacentEdges = graph.GetEdges(vertex);
+            var edges = adjacentEdges as Edge[] ?? adjacentEdges.ToArray();
+
+            if (edges.Length > 0)
+            {
+                for (int i = 0; i < edges.Count() - 1; i++)
+                {
+                    graph.RemoveEdge(edges[i]);
+                }
+            }
+            else
+            {
+                Edge edge = new Edge(graph.Vertices.ElementAt(random.Next(graph.Vertices.Count)), vertex);
+                graph.AddEdge(edge);
+            }
+            DrawGraph(graph, attributes);
+        }
+
+        private void RemovePendent_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<Vertex> vertices = graph.GetPendentVertices();
+            if (!vertices.Any())
+            {
+                VertexCoverOutput.Text = "This graph has no pendent vertices";
+                return;
+            }
+            Vertex vertex = vertices.ElementAt(random.Next(vertices.Count()));
+            Edge edge = new Edge(graph.Vertices.ElementAt(random.Next(graph.Vertices.Count)), vertex);
+            graph.AddEdge(edge);
             DrawGraph(graph, attributes);
         }
     }

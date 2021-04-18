@@ -103,10 +103,19 @@ namespace VertexCover
         /// <summary>
         /// Get a set of all vertices with a specific amount of edges
         /// </summary>
-        /// <returns>The set of all vertices who satisfies the values</returns>
-        public IEnumerable<Vertex> GetVerticesSetWithEdgeCount(int edgeCount)
+        /// <returns>The set of all vertices that are pendent</returns>
+        public IEnumerable<Vertex> GetPendentVertices()
         {
-            return Vertices.Where(vertex => GetEdges(vertex).Count() == edgeCount);
+            return Vertices.Where(vertex => GetEdges(vertex).Count() == 1);
+        }
+
+        /// <summary>
+        /// Get a set of all vertices with a specific above an amount of edges
+        /// </summary>
+        /// <returns>The set of all vertices who satisfies the values</returns>
+        public IEnumerable<Vertex> GetVerticesSetWithHigherThanEdgeCount(int edgeCount)
+        {
+            return Vertices.Where(vertex => GetEdges(vertex).Count() > edgeCount);
         }
 
         /// <summary>
@@ -116,6 +125,15 @@ namespace VertexCover
         public void RemoveEdge(Edge edge)
         {
             edges.Remove(edge);
+        }
+
+        /// <summary>
+        /// Add a single new edge
+        /// </summary>
+        /// <param name="edge">The edge you want to add</param>
+        public void AddEdge(Edge edge)
+        {
+            edges.Add(edge);
         }
     }
 }
