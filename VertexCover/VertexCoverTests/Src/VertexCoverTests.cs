@@ -49,8 +49,8 @@ namespace VertexCover.Tests
             {
                 new Vertex(0),
                 new Vertex(1),
-                new Vertex(4),
-                new Vertex(5)
+                new Vertex(3),
+                new Vertex(4)
             });
 
             CollectionAssert.AreEqual(cover, answer);

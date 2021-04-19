@@ -82,43 +82,6 @@ namespace VertexCover
         }
 
         /// <summary>
-        /// From a vertex get all edges that start at this vertex
-        /// </summary>
-        /// <param name="vertex">The vertex you want to check with</param>
-        /// <returns>All adjacent edges</returns>
-        public IEnumerable<Edge> GetEdgesStartingHere(Vertex vertex)
-        {
-            return Edges.Where(edge => Equals(edge.StartVertex, vertex));
-        }
-
-        /// <summary>
-        /// Get a set of all vertices that are independent
-        /// </summary>
-        /// <returns>The independent vertices set</returns>
-        public IEnumerable<Vertex> GetIndependentVerticesSet()
-        {
-            return Vertices.Where(vertex => !GetEdges(vertex).Any());
-        }
-
-        /// <summary>
-        /// Get a set of all vertices with a specific amount of edges
-        /// </summary>
-        /// <returns>The set of all vertices that are pendent</returns>
-        public IEnumerable<Vertex> GetPendentVertices()
-        {
-            return Vertices.Where(vertex => GetEdges(vertex).Count() == 1);
-        }
-
-        /// <summary>
-        /// Get a set of all vertices with a specific above an amount of edges
-        /// </summary>
-        /// <returns>The set of all vertices who satisfies the values</returns>
-        public IEnumerable<Vertex> GetVerticesSetWithHigherThanEdgeCount(int edgeCount)
-        {
-            return Vertices.Where(vertex => GetEdges(vertex).Count() > edgeCount);
-        }
-
-        /// <summary>
         /// Remove a specific edge
         /// </summary>
         /// <param name="edge">The edge you want to delete</param>
