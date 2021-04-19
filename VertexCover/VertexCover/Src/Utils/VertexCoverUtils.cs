@@ -43,8 +43,9 @@ namespace VertexCover
             cover.Push(graph.Vertices.ElementAt(depth));
             if (IsVertexCoverPossible(graph, cover, depth + 1, requestSize))
                 return true;
-            cover.Pop();
 
+
+            cover.Pop();
             return IsVertexCoverPossible(graph, cover, depth + 1, requestSize);
         }
 
@@ -62,8 +63,8 @@ namespace VertexCover
                 edges.AddRange(graph.GetEdges(vertex));
             }
 
-            int test = edges.Distinct().Count();
-            return test == graph.Edges.Count;
+            int coveredEdges = edges.Distinct().Count();
+            return coveredEdges == graph.Edges.Count;
         }
 
     }

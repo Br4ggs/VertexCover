@@ -20,7 +20,6 @@ namespace VertexCover
     public partial class MainWindow : Window
     {
         private readonly MatrixBuilder matrixBuilder = new MatrixBuilder();
-        private bool[,] matrix = new bool[0, 0];
         private Graph graph;
         private GraphVizAttributes attributes = new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
 
@@ -41,8 +40,7 @@ namespace VertexCover
             if (!generateWindow.Completed)
                 return;
 
-            matrix = generateWindow.Matrix;
-            graph = new Graph(matrix);
+            graph = new Graph(generateWindow.Matrix);
             attributes.Clear();
             attributes.LabelElementsNumeric(graph.Vertices);
             DrawGraph(graph, attributes);
@@ -50,7 +48,7 @@ namespace VertexCover
 
         private void GenerateVertexCoverButton_Click(object sender, RoutedEventArgs e)
         {
-            GenerateVertexCoverWindow generateVertexCoverWindow = new GenerateVertexCoverWindow(matrix);
+            GenerateVertexCoverWindow generateVertexCoverWindow = new GenerateVertexCoverWindow(graph);
             generateVertexCoverWindow.ShowDialog();
 
             if (!generateVertexCoverWindow.Completed)
@@ -94,8 +92,7 @@ namespace VertexCover
 
         private void GenerateDefaultGraph()
         {
-            matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50);
-            graph = new Graph(matrix);
+            graph = new Graph(matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50));
             attributes.LabelElementsNumeric(graph.Vertices);
             DrawGraph(graph, attributes);
         }
@@ -145,7 +142,7 @@ namespace VertexCover
             IEnumerable<Vertex> vertices = GraphKernelizer.FindPendantVertices(graph);
             if (vertices.IsEmpty())
             {
-                VertexCoverOutput.Text = "This graph has no top vertices";
+                VertexCoverOutput.Text = "This graph has no pendent vertices";
                 return;
             }
 
