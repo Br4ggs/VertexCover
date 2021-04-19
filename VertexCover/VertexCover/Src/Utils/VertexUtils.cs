@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using VertexCover.Extensions;
 
 namespace VertexCover.Utils
 {
     public static class VertexUtils
     {
-        private static readonly Random random = new Random();
-
         /// <summary>
         /// Transform a vertex's edges so that it has a specific 
         /// </summary>
@@ -37,7 +35,7 @@ namespace VertexCover.Utils
             {
                 for (int i = 0; i < Math.Abs(difference); i++)
                 {
-                    Edge edge = new Edge(graph.Vertices.ElementAt(random.Next(graph.Vertices.Count)), vertex);
+                    Edge edge = new Edge(graph.Vertices.Random(), vertex);
                     graph.AddEdge(edge);
                 }
 
