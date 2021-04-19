@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using VertexCover;
 using VertexCover.Extensions;
 using VertexCover.Src.GraphViz;
 using VertexCover.Utils;
@@ -21,11 +20,12 @@ namespace VertexCover
     public partial class MainWindow : Window
     {
         private readonly MatrixBuilder matrixBuilder = new MatrixBuilder();
-        private int imagesGenerated = 0;
         private bool[,] matrix = new bool[0, 0];
         private Graph graph;
-        private GraphVizAttributes attributes;
-        private uint kSize = 0;
+        private GraphVizAttributes attributes = new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
+
+        private int imagesGenerated;
+        private uint kSize;
         public MainWindow()
         {
             InitializeComponent();
@@ -43,7 +43,8 @@ namespace VertexCover
 
             matrix = generateWindow.Matrix;
             graph = new Graph(matrix);
-            GenerateAttributes();
+            attributes.Clear();
+            attributes.LabelElementsNumeric(graph.Vertices);
             DrawGraph(graph, attributes);
         }
 
@@ -65,9 +66,10 @@ namespace VertexCover
 
             string edges = vertexCover.Aggregate("", (current, vertex) => current + (vertex.ID + " "));
 
-            GenerateAttributes();
-            ColorValues(vertexCover, Color.Green);
-            ColorValues(graph.Edges, Color.Green);
+            attributes.Clear();
+            attributes.LabelElementsNumeric(graph.Vertices);
+            attributes.ColorElements(vertexCover, Color.Green);
+            attributes.ColorElements(graph.Edges, Color.Green);
 
             VertexCoverOutput.Text = "Vertices: " + edges + "form biggest vertex cover for graph";
             DrawGraph(graph, attributes);
@@ -90,22 +92,11 @@ namespace VertexCover
             }
         }
 
-        private void GenerateAttributes()
-        {
-            attributes =
-                new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
-
-            for (int i = 0; i < graph.Vertices.Count; i++)
-            {
-                attributes.AddAttribute(graph.Vertices.ElementAt(i), new Tuple<string, string>("label", i.ToString()));
-            }
-        }
-
         private void GenerateDefaultGraph()
         {
             matrix = matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50);
             graph = new Graph(matrix);
-            GenerateAttributes();
+            attributes.LabelElementsNumeric(graph.Vertices);
             DrawGraph(graph, attributes);
         }
 
@@ -182,8 +173,10 @@ namespace VertexCover
 
         private void ColorKernelization()
         {
-            GenerateAttributes();
-            var kernelized = GraphKernelizer.FindKernelizedAttributes(graph, (int)kSize);
+            attributes.Clear();
+            attributes.LabelElementsNumeric(graph.Vertices);
+            KernelizedAttributes kernelized = GraphKernelizer.FindKernelizedAttributes(graph, (int)kSize);
+
             // Color neighbours of pendants
             List<Vertex> vertices = new List<Vertex>();
             foreach (var pendent in kernelized.Pendants)
@@ -191,23 +184,11 @@ namespace VertexCover
                 var edges = graph.GetEdges(pendent);
                 vertices.AddRange(edges.Select(edge => Equals(edge.StartVertex, pendent) ? edge.EndVertex : edge.StartVertex));
             }
-            ColorValues(vertices.Distinct(), Color.LightBlue);
-            ColorValues(kernelized.Pendants, Color.Blue);
-            ColorValues(kernelized.Tops, Color.Red);
+            attributes.ColorElements(vertices.Distinct(), Color.LightBlue);
+            attributes.ColorElements(kernelized.Pendants, Color.Blue);
+            attributes.ColorElements(kernelized.Tops, Color.Red);
 
-            ColorValues(kernelized.Independents, Color.Green);
+            attributes.ColorElements(kernelized.Independents, Color.Green);
         }
-
-        private void ColorValues(IEnumerable<IGraphElement> elements, Color color)
-        {
-            string colorString = color.Name.ToLower();
-
-            foreach (var element in elements)
-            {
-                attributes.AddAttribute(element, new Tuple<string, string>("color", colorString));
-            }
-        }
-
-
     }
 }

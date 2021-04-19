@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace VertexCover.Src.GraphViz
 {
@@ -60,6 +61,49 @@ namespace VertexCover.Src.GraphViz
         public bool HasAttributes(IGraphElement graphElement)
         {
             return attributes.ContainsKey(graphElement);
+        }
+
+        /// <summary>
+        /// Color all elements
+        /// </summary>
+        /// <param name="elements">The elements you want to color</param>
+        /// <param name="color">The color that you want</param>
+        public void ColorElements(IEnumerable<IGraphElement> elements, Color color)
+        {
+            if (elements == null)
+                throw new ArgumentNullException(nameof(elements));
+
+            string colorString = color.Name.ToLower();
+
+            foreach (var element in elements)
+            {
+                AddAttribute(element, new Tuple<string, string>("color", colorString));
+            }
+        }
+
+        /// <summary>
+        /// Label elements with its index in the array
+        /// </summary>
+        /// <param name="elements">The elements you want to label</param>
+        public void LabelElementsNumeric(IEnumerable<IGraphElement> elements)
+        {
+            if (elements == null)
+                throw new ArgumentNullException(nameof(elements));
+
+            int index = 0;
+            foreach (var element in elements)
+            {
+                AddAttribute(element, new Tuple<string, string>("label", index++.ToString()));
+            }
+        }
+
+
+        /// <summary>
+        /// Clear all attributes
+        /// </summary>
+        public void Clear()
+        {
+            attributes.Clear();
         }
     }
 }
