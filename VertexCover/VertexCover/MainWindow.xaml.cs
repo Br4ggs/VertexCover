@@ -115,22 +115,32 @@ namespace VertexCover
             TransformVertexDegree(vertices, $"All vertices have more than {kSize} elements", (int)kSize);
         }
 
+        //TODO:
         private void RemoveTopVertex_Click(object sender, RoutedEventArgs e)
         {
             IEnumerable<Vertex> vertices = graph.GetVerticesSetWithHigherThanEdgeCount((int)kSize);
             TransformVertexDegree(vertices, "This graph has no top vertices", 1);
+            //if vertices is null: display error message
+            //else pick out random vertex, or just index 0
+            //call transform vertex method on graph to turn vertex degree into desirable number
         }
 
         private void AddPendent_Click(object sender, RoutedEventArgs e)
         {
             IEnumerable<Vertex> vertices = graph.Vertices.Where(vertex => graph.GetEdges(vertex).Count() != 1);
             TransformVertexDegree(vertices, "This graph has only pendent vertices", 1);
+            //if vertices is null: display error message
+            //else pick out random vertex, or just index 0
+            //call transform vertex method on graph to turn vertex degree into desirable number
         }
 
         private void RemovePendent_Click(object sender, RoutedEventArgs e)
         {
             IEnumerable<Vertex> vertices = graph.GetPendentVertices();
             TransformVertexDegree(vertices, "This graph has no pendent vertices", 2);
+            //if vertices is null: display error message
+            //else pick out random vertex, or just index 0
+            //call transform vertex method on graph to turn vertex degree into desirable number
         }
 
         private void TransformVertexDegree(IEnumerable<Vertex> vertices, string failedMessage, int edges)
