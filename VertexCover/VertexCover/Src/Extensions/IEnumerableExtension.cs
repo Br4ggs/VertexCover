@@ -29,5 +29,17 @@ namespace VertexCover.Extensions
         {
             return enumerable.ElementAt(new Random().Next(enumerable.Count()));
         }
+
+        /// <summary>
+        /// Filter out all values from an IEnumerable
+        /// </summary>
+        /// <typeparam name="T">The type of IEnumerable</typeparam>
+        /// <param name="enumerable">The enumerable you want to filter</param>
+        /// <param name="filter">The filter elements you want to apply</param>
+        /// <returns></returns>
+        public static IEnumerable<T> Filter<T>(this IEnumerable<T> enumerable, IEnumerable<T> filter)
+        {
+            return enumerable.Where(vertex => !filter.Contains(vertex));
+        }
     }
 }
