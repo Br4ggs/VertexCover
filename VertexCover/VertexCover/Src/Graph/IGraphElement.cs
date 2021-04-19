@@ -1,4 +1,4 @@
-﻿namespace VertexCover.Src.Graph
+﻿namespace VertexCover
 {
     public interface IGraphElement
     {

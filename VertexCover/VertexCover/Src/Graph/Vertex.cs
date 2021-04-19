@@ -1,6 +1,4 @@
-﻿using VertexCover.Src.Graph;
-
-namespace VertexCover
+﻿namespace VertexCover
 {
     public class Vertex : IGraphElement
     {
