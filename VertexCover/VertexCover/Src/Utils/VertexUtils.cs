@@ -14,8 +14,7 @@ namespace VertexCover.Utils
         /// <param name="weight">The weight of the vertex</param>
         public static void TransformVertexDegree(Graph graph, Vertex vertex, uint weight)
         {
-            if (graph is null)
-
+            if (graph == null)
                 throw new ArgumentNullException(nameof(graph));
 
             if (vertex == null)

@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows.Markup.Localizer;
-using VertexCover.Src;
 
 namespace VertexCover
 {

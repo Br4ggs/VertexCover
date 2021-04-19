@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using VertexCover.Src.Graph;
 
 namespace VertexCover.Src.GraphViz
 {
