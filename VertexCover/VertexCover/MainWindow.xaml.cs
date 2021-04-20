@@ -99,10 +99,16 @@ namespace VertexCover
 
         private void AddTopVertex_Click(object sender, RoutedEventArgs e)
         {
+            if (kSize >= graph.Vertices.Count() - 1)
+            {
+                VertexCoverOutput.Text = "There are no vertices that can have that many connections";
+                return;
+            }
+
             IEnumerable<Vertex> vertices = graph.Vertices.Where(vertex => graph.GetEdges(vertex).Count() < kSize);
             if (vertices.IsEmpty())
             {
-                VertexCoverOutput.Text = "This graph has no top vertices";
+                VertexCoverOutput.Text = "This graph has only top vertices";
                 return;
             }
 

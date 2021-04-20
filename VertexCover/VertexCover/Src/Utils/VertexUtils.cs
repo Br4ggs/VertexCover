@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Markup.Localizer;
 using VertexCover.Extensions;
 
 namespace VertexCover.Utils
@@ -32,9 +33,11 @@ namespace VertexCover.Utils
             }
             else if (difference < 0)
             {
-                for (int i = 0; i < Math.Abs(difference); i++)
+                var vertices = graph.Vertices.Where(neighbor => !Equals(vertex, neighbor) && !graph.AreConnected(vertex, neighbor)).ToArray();
+
+                for (int i = 0; i < Math.Abs(difference) && i < vertices.Length; i++)
                 {
-                    Edge edge = new Edge(graph.Vertices.Random(), vertex);
+                    Edge edge = new Edge(vertices[i], vertex);
                     graph.AddEdge(edge);
                 }
 
