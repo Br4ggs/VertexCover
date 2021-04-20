@@ -4,11 +4,20 @@ using System.Linq;
 
 namespace VertexCover
 {
+    /// <summary>
+    /// Holds all data for a specific graph
+    /// </summary>
     public class Graph
     {
+        /// <summary>
+        /// Get all edges in the graph
+        /// </summary>
         public IReadOnlyCollection<Edge> Edges => edges;
         private readonly List<Edge> edges;
 
+        /// <summary>
+        /// Get all vertices in the graph
+        /// </summary>
         public IReadOnlyCollection<Vertex> Vertices => vertices;
         private readonly List<Vertex> vertices;
 
@@ -42,6 +51,26 @@ namespace VertexCover
 
                     edges.Add(new Edge(vertices[j], vertices[i]));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Create a copy of an existing graph
+        /// </summary>
+        /// <param name="graph">The graph you want to copy</param>
+        public Graph(Graph graph)
+        {
+            edges = new List<Edge>();
+            vertices = new List<Vertex>();
+
+            foreach (var vertex in graph.Vertices)
+            {
+                vertices.Add(new Vertex(vertex.ID));
+            }
+
+            foreach (var edge in graph.Edges)
+            {
+                edges.Add(new Edge(vertices[edge.StartVertex.ID], vertices[edge.EndVertex.ID]));
             }
         }
 
@@ -80,21 +109,21 @@ namespace VertexCover
         }
 
         /// <summary>
-        /// Remove a specific edge
-        /// </summary>
-        /// <param name="edge">The edge you want to delete</param>
-        public void RemoveEdge(Edge edge)
-        {
-            edges.Remove(edge);
-        }
-
-        /// <summary>
         /// Add a single new edge
         /// </summary>
         /// <param name="edge">The edge you want to add</param>
         public void AddEdge(Edge edge)
         {
             edges.Add(edge);
+        }
+
+        /// <summary>
+        /// Remove a specific edge
+        /// </summary>
+        /// <param name="edge">The edge you want to delete</param>
+        public void RemoveEdge(Edge edge)
+        {
+            edges.Remove(edge);
         }
     }
 }
