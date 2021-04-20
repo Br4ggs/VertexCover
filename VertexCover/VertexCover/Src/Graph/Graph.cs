@@ -37,10 +37,10 @@ namespace VertexCover
                         break;
                     }
 
-                    if (adjacencyMatrix[i, j])
-                    {
-                        edges.Add(new Edge(vertices[j], vertices[i]));
-                    }
+                    if (!adjacencyMatrix[i, j])
+                        continue;
+
+                    edges.Add(new Edge(vertices[j], vertices[i]));
                 }
             }
         }
@@ -80,13 +80,21 @@ namespace VertexCover
         }
 
         /// <summary>
-        /// From a vertex get all edges that start at this vertex
+        /// Remove a specific edge
         /// </summary>
-        /// <param name="vertex">The vertex you want to check with</param>
-        /// <returns>All adjacent edges</returns>
-        public IEnumerable<Edge> GetEdgesStartingHere(Vertex vertex)
+        /// <param name="edge">The edge you want to delete</param>
+        public void RemoveEdge(Edge edge)
         {
-            return Edges.Where(edge => Equals(edge.StartVertex, vertex));
+            edges.Remove(edge);
+        }
+
+        /// <summary>
+        /// Add a single new edge
+        /// </summary>
+        /// <param name="edge">The edge you want to add</param>
+        public void AddEdge(Edge edge)
+        {
+            edges.Add(edge);
         }
     }
 }

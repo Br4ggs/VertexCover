@@ -21,16 +21,15 @@ namespace VertexCover
     {
         public bool Completed { get; private set; }
         public int Nodes { get; private set; }
-        public bool[] VertexCover { get; private set; }
+        public Stack<Vertex> VertexCover { get; private set; }
 
-        private readonly bool[,] adjacencyMatrix;
+        private readonly Graph graph;
 
-        public GenerateVertexCoverWindow(bool[,] adjacencyMatrix)
+        public GenerateVertexCoverWindow(Graph graph)
         {
             Completed = false;
             Nodes = 0;
-            VertexCover = new bool[0];
-            this.adjacencyMatrix = adjacencyMatrix;
+            this.graph = graph;
             InitializeComponent();
         }
 
@@ -42,14 +41,14 @@ namespace VertexCover
 
         private void NodesTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Nodes = Int32.Parse((sender as TextBox).Text);
+            if (int.TryParse((sender as TextBox)?.Text, out var value))
+                Nodes = value;
         }
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             //show loading screen
-            Graph graph = new Graph(adjacencyMatrix);
-            VertexCover = VertexCoverUtils.GetVertexCover(graph, Convert.ToUInt32(Nodes));
+            VertexCover = VertexCoverUtils.GetVertexCover(graph, Nodes);
             Completed = true;
             Close();
         }

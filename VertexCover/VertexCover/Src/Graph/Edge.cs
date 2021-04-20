@@ -1,5 +1,4 @@
 ﻿using System;
-using VertexCover.Src.Graph;
 
 namespace VertexCover
 {
@@ -16,7 +15,7 @@ namespace VertexCover
 
         protected bool Equals(Edge other)
         {
-            return StartVertex == other.StartVertex && EndVertex == other.EndVertex;
+            return Equals(StartVertex, other.StartVertex) && Equals(EndVertex, other.EndVertex);
         }
 
         public override bool Equals(object obj)
