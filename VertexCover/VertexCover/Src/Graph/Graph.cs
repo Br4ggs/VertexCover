@@ -43,8 +43,6 @@ namespace VertexCover
                     edges.Add(new Edge(vertices[j], vertices[i]));
                 }
             }
-
-
         }
 
         /// <summary>
