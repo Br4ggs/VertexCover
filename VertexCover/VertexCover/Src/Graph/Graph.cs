@@ -70,7 +70,10 @@ namespace VertexCover
 
             foreach (var edge in graph.Edges)
             {
-                edges.Add(new Edge(vertices[edge.StartVertex.ID], vertices[edge.EndVertex.ID]));
+                Vertex vertex = vertices.Find(vertex1 => vertex1.ID == edge.StartVertex.ID);
+                Vertex vertex2 = vertices.Find(vertex1 => vertex1.ID == edge.EndVertex.ID);
+
+                edges.Add(new Edge(vertex, vertex2));
             }
         }
 
@@ -94,6 +97,12 @@ namespace VertexCover
         /// <returns>True if the two vertices are connected</returns>
         public bool AreConnected(Vertex vertex, Vertex otherVertex)
         {
+            if (vertex == null)
+                throw new ArgumentNullException(nameof(vertex));
+
+            if (otherVertex == null)
+                throw new ArgumentNullException(nameof(otherVertex));
+
             return Edges.Any(edge => (Equals(edge.StartVertex, vertex) && Equals(edge.EndVertex, otherVertex)) ||
                                      (Equals(edge.StartVertex, otherVertex) && Equals(edge.EndVertex, vertex)));
         }
@@ -105,6 +114,9 @@ namespace VertexCover
         /// <returns>All adjacent edges</returns>
         public IEnumerable<Edge> GetEdges(Vertex vertex)
         {
+            if (vertex == null)
+                throw new ArgumentNullException(nameof(vertex));
+
             return Edges.Where(edge => Equals(edge.StartVertex, vertex) || Equals(edge.EndVertex, vertex));
         }
 
@@ -114,6 +126,13 @@ namespace VertexCover
         /// <param name="edge">The edge you want to add</param>
         public void AddEdge(Edge edge)
         {
+            if (edge == null)
+                throw new ArgumentNullException(nameof(edge));
+
+            if (!vertices.Contains(edge.StartVertex) || !vertices.Contains(edge.EndVertex))
+            {
+                throw new ArgumentException();
+            }
             edges.Add(edge);
         }
 
@@ -121,9 +140,45 @@ namespace VertexCover
         /// Remove a specific edge
         /// </summary>
         /// <param name="edge">The edge you want to delete</param>
-        public void RemoveEdge(Edge edge)
+        /// <returns>True if the edge was removed false if it was not</returns>
+        public bool RemoveEdge(Edge edge)
         {
-            edges.Remove(edge);
+            return edges.Remove(edge);
+        }
+
+        /// <summary>
+        /// Add a vertex to the graph. Only if the vertex is not inside of the graph.
+        /// </summary>
+        /// <param name="vertex">The vertex you want to add</param>
+        public void AddVertex(Vertex vertex)
+        {
+            if (vertex == null)
+                throw new ArgumentNullException(nameof(vertex));
+
+            if (vertices.Contains(vertex))
+            {
+                throw new ArgumentException($"{nameof(vertex)} is already inside of the graph");
+            }
+
+            vertices.Add(vertex);
+        }
+
+        /// <summary>
+        /// Remove the vertex from a graph. All edges to the vertex will also be removed.
+        /// </summary>
+        /// <param name="vertex">The vertex you want to remove</param>
+        /// <returns>True it was successfully removed</returns>
+        public bool RemoveVertex(Vertex vertex)
+        {
+            if (!vertices.Contains(vertex))
+                return false;
+
+            var invalidEdges = GetEdges(vertex).ToArray();
+            foreach (var edge in invalidEdges)
+            {
+                RemoveEdge(edge);
+            }
+            return vertices.Remove(vertex);
         }
     }
 }
