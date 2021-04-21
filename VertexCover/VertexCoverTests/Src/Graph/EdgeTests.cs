@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VertexCover;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace VertexCover.Tests
 {
@@ -18,6 +15,21 @@ namespace VertexCover.Tests
             Edge edge = new Edge(startVertex, endVertex);
             Assert.AreEqual(edge.StartVertex, startVertex);
             Assert.AreEqual(edge.EndVertex, endVertex);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+
+        public void EdgeTest_NullStartVertex()
+        {
+            _ = new Edge(null, new Vertex(1));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void EdgeTest_NullEndVertex()
+        {
+            _ = new Edge(new Vertex(0), null);
         }
 
         [TestMethod()]
