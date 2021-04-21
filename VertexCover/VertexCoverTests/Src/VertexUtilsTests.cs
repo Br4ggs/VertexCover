@@ -66,8 +66,7 @@ namespace VertexCover.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void UpdateVertexDegree_VertexNull()
         {
-            Vertex vertex = graph.Vertices.ElementAt(1);
-            VertexUtils.TransformVertexDegree(null, vertex, 1);
+            VertexUtils.TransformVertexDegree(graph, null, 1);
         }
     }
 }
