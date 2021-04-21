@@ -21,15 +21,23 @@ namespace VertexCover
                 includedVertices.AddRange(connectedEdges.Select(edge => pendent.Equals(edge.StartVertex) ? edge.EndVertex : edge.StartVertex));
             }
 
-            //get connected edges of included vertices
-            //remove edges
-            //remove pendents
-            //remove included vertices
+            foreach(Vertex independent in independents)
+            {
+                preprocessedGraph.RemoveVertex(independent);
+            }
+            foreach(Vertex pendant in pendants)
+            {
+                preprocessedGraph.RemoveVertex(pendant);
+            }
+            foreach(Vertex includedVertex in includedVertices)
+            {
+                preprocessedGraph.RemoveVertex(includedVertex);
+            }
 
             //possibly, also add top vertices to included vertices
             //possibly, remove top vertices from graph
 
-            PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices, preprocessedGraph);
+            PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices.Distinct(), preprocessedGraph);
             return preProcessedGraphAttributes;
         }
     }

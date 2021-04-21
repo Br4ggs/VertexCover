@@ -51,15 +51,15 @@ namespace VertexCoverTests.Tests
             Graph graphWithTwoPendants = new Graph(matrixWithTwoPendants);
             PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetVertexCoverProcessedGraph(graphWithTwoPendants);
             
-            Assert.AreEqual(graphAttributes.IncludedVertices.Count(), 1);
-            Assert.AreEqual(graphAttributes.IncludedVertices.ElementAt(0).ID, 2);
+            Assert.AreEqual(1, graphAttributes.IncludedVertices.Count());
+            Assert.AreEqual(2, graphAttributes.IncludedVertices.ElementAt(0).ID);
 
-            Assert.AreEqual(graphAttributes.ProcessedGraph.Vertices.Count(), 2);
-            Assert.AreEqual(graphAttributes.ProcessedGraph.Vertices.ElementAt(0).ID, 0);
-            Assert.AreEqual(graphAttributes.ProcessedGraph.Vertices.ElementAt(1).ID, 1);
-            Assert.AreEqual(graphAttributes.ProcessedGraph.Edges.Count(), 1);
-            Assert.AreEqual(graphAttributes.ProcessedGraph.Edges.ElementAt(0).StartVertex, graphAttributes.ProcessedGraph.Vertices.ElementAt(0));
-            Assert.AreEqual(graphAttributes.ProcessedGraph.Edges.ElementAt(0).EndVertex, graphAttributes.ProcessedGraph.Vertices.ElementAt(1));
+            Assert.AreEqual(2, graphAttributes.ProcessedGraph.Vertices.Count());
+            Assert.AreEqual(0, graphAttributes.ProcessedGraph.Vertices.ElementAt(0).ID);
+            Assert.AreEqual(1, graphAttributes.ProcessedGraph.Vertices.ElementAt(1).ID);
+            Assert.AreEqual(1, graphAttributes.ProcessedGraph.Edges.Count());
+            Assert.AreEqual(graphAttributes.ProcessedGraph.Vertices.ElementAt(0), graphAttributes.ProcessedGraph.Edges.ElementAt(0).StartVertex);
+            Assert.AreEqual(graphAttributes.ProcessedGraph.Vertices.ElementAt(1), graphAttributes.ProcessedGraph.Edges.ElementAt(0).EndVertex);
         }
 
         [TestMethod()]

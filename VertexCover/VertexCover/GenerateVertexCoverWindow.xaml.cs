@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using VertexCover.Src;
+using System.Linq;
 
 namespace VertexCover
 {
@@ -21,14 +22,20 @@ namespace VertexCover
     {
         public bool Completed { get; private set; }
         public int Nodes { get; private set; }
-        public Stack<Vertex> VertexCover { get; private set; }
+        public List<Vertex> VertexCover { get; private set; }
+        public bool UsePreprocessing { get; private set; }
 
-        private readonly Graph graph;
+        private Graph graph;
+
+        private GraphPreprocessor graphPreProcessor = new GraphPreprocessor();
 
         public GenerateVertexCoverWindow(Graph graph)
         {
             Completed = false;
             Nodes = 0;
+            VertexCover = new List<Vertex>();
+            UsePreprocessing = false;
+
             this.graph = graph;
             InitializeComponent();
         }
@@ -45,12 +52,42 @@ namespace VertexCover
                 Nodes = value;
         }
 
+        private void PreprocessingCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            UsePreprocessing = true;
+        }
+
+        private void PreprocessingCheckBox_UnChecked(object sender, RoutedEventArgs e)
+        {
+            UsePreprocessing = false;
+        }
+
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
+            int vertexCoverSize = Nodes;
             //show loading screen
-            VertexCover = VertexCoverUtils.GetVertexCover(graph, Nodes);
+            if(UsePreprocessing)
+            {
+                PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
+                VertexCover.AddRange(attributes.IncludedVertices);
+                graph = attributes.ProcessedGraph;
+                vertexCoverSize -= attributes.IncludedVertices.Count();
+            }
+
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize);
+
+            if(cover == null)
+            {
+                VertexCover = new List<Vertex>();
+            }
+            else
+            {
+                VertexCover.AddRange(cover);
+            }
+
             Completed = true;
             Close();
         }
+
     }
 }

@@ -54,9 +54,9 @@ namespace VertexCover
             if (!generateVertexCoverWindow.Completed)
                 return;
 
-            Stack<Vertex> vertexCover = generateVertexCoverWindow.VertexCover;
+            List<Vertex> vertexCover = generateVertexCoverWindow.VertexCover;
 
-            if (vertexCover == null)
+            if (vertexCover.IsEmpty())
             {
                 VertexCoverOutput.Text = "No suitable vertex cover could be found";
                 return;
