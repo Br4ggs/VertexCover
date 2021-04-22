@@ -37,7 +37,7 @@ namespace VertexCover
             //possibly, also add top vertices to included vertices
             //possibly, remove top vertices from graph
 
-            PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices.Distinct(), preprocessedGraph);
+            PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices.Distinct(), pendants.Distinct(), preprocessedGraph);
             return preProcessedGraphAttributes;
         }
     }
@@ -45,13 +45,17 @@ namespace VertexCover
     public struct PreProcessedGraphAttributes
     {
         public IEnumerable<Vertex> IncludedVertices { get; }
+        
+        public IEnumerable<Vertex> DiscardedVertices { get; }
         public Graph ProcessedGraph { get; }
 
         public PreProcessedGraphAttributes(
             IEnumerable<Vertex> includedVertices,
+            IEnumerable<Vertex> discardedVertices,
             Graph processedGraph)
         {
             IncludedVertices = includedVertices;
+            DiscardedVertices = discardedVertices;
             ProcessedGraph = processedGraph;
         }
     }

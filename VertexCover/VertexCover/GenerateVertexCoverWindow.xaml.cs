@@ -65,18 +65,30 @@ namespace VertexCover
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             int vertexCoverSize = Nodes;
+            Graph coveredGraph = graph;
             //show loading screen
-            if(UsePreprocessing)
+            if (UsePreprocessing)
             {
                 PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
                 VertexCover.AddRange(attributes.IncludedVertices);
-                graph = attributes.ProcessedGraph;
+                coveredGraph = attributes.ProcessedGraph;
                 vertexCoverSize -= attributes.IncludedVertices.Count();
+
+                foreach(Vertex discardedVertex in attributes.DiscardedVertices)
+                {
+                    if(coveredGraph.Vertices.Count() >= vertexCoverSize)
+                    {
+                        break;
+                    }
+
+                    VertexCover.Add(discardedVertex);
+                    vertexCoverSize--;
+                }
             }
 
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize);
+            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(coveredGraph, vertexCoverSize);
 
-            if(cover == null)
+            if (cover == null)
             {
                 VertexCover = new List<Vertex>();
             }
