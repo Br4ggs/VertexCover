@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using System.Linq;
+using VertexCover.Extensions;
 
 namespace VertexCover
 {
@@ -78,15 +79,14 @@ namespace VertexCover
                 }
             }
 
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(coveredGraph, vertexCoverSize);
-
-            if (cover == null)
+            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize);
+            if (vertices.IsEmpty())
             {
                 VertexCover = new List<Vertex>();
             }
             else
             {
-                VertexCover.AddRange(cover);
+                VertexCover.AddRange(vertices);
             }
 
             Completed = true;
