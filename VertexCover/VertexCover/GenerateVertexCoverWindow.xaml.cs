@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Threading.Tasks;
 using VertexCover.Extensions;
+using VertexCover.Utils;
 
 namespace VertexCover
 {
@@ -22,6 +26,8 @@ namespace VertexCover
 
         private GraphPreprocessor graphPreProcessor = new GraphPreprocessor();
 
+        private OptimizedProgressBar progressBar;
+
         public GenerateVertexCoverWindow(Graph graph)
         {
             Completed = false;
@@ -31,6 +37,7 @@ namespace VertexCover
 
             this.graph = graph;
             InitializeComponent();
+            progressBar = new OptimizedProgressBar(VertexCoverProgressBar);
         }
 
         private void NodesTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
