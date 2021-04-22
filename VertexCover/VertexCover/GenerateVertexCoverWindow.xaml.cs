@@ -64,9 +64,15 @@ namespace VertexCover
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmButton.Visibility = Visibility.Hidden;
+            Task task = new Task(() => FindVertexCover(CloseWindow));
+            task.Start();
+            progressBar.UI.Visibility = Visibility.Visible;
+        }
+
+        private void FindVertexCover(Action onVertexCoverFound)
+        {
             int vertexCoverSize = Nodes;
-            Graph coveredGraph = graph;
-            //show loading screen
             if (UsePreprocessing)
             {
                 PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
@@ -86,7 +92,8 @@ namespace VertexCover
                 }
             }
 
-            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize);
+            progressBar.StartProgressBar((ulong)Math.Pow(2, graph.Vertices.Count), .05);
+            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize, OnVertexProcessed);
             if (vertices.IsEmpty())
             {
                 VertexCover = new List<Vertex>();
@@ -95,10 +102,20 @@ namespace VertexCover
             {
                 VertexCover.AddRange(vertices);
             }
+            Application.Current.Dispatcher.Invoke(onVertexCoverFound);
+        }
 
+        private void OnVertexProcessed()
+        {
+            Application.Current.Dispatcher.Invoke(() => progressBar.TakeStep());
+        }
+
+        private void CloseWindow()
+        {
+            progressBar.UI.Value = 100;
+            progressBar.UI.UpdateLayout();
             Completed = true;
             Close();
         }
-
     }
 }
