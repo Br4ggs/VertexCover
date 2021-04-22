@@ -8,6 +8,12 @@ namespace VertexCover
     {
         private Random random = new Random();
 
+        /// <summary>
+        /// Generate a complete adjacency matrix for a fully connected graph
+        /// </summary>
+        /// <param name="vertices">The number of vertices to include in the graph</param>
+        /// <param name="edgeProbability">The probability of an edge being created between two vertices, expressed as an integer from 0 (no edges) to 100 (all edges)</param>
+        /// <returns>An adjacency matrix for the generated fully connected graph</returns>
         public bool[,] GenerateCompleteAdjacencyMatrix(int vertices, int edgeProbability)
         {
             bool[,] matrix = GenerateAdjacencyMatrix(vertices, edgeProbability);
@@ -17,6 +23,12 @@ namespace VertexCover
             return matrix;
         }
 
+        /// <summary>
+        /// Generate a complete adjaceny matrix for a graph
+        /// </summary>
+        /// <param name="vertices">The number of vertices to include in the graph</param>
+        /// <param name="edgeProbability">The probability of an edge being created between two vertices, expressed as an integer from 0 (no edges) to 100 (all edges)</param>
+        /// <returns>An adjacency matrix for the generated graph</returns>
         public bool[,] GenerateAdjacencyMatrix(int vertices, int edgeProbability)
         {
             bool[,] matrix = new bool[vertices, vertices];
@@ -37,6 +49,11 @@ namespace VertexCover
             return matrix;
         }
 
+        /// <summary>
+        /// Finds the (sub)graphs in a graph
+        /// </summary>
+        /// <param name="adjacencyMatrix">The initial graph</param>
+        /// <returns>A collection of all found (sub)graphs in the graph</returns>
         public List<List<int>> FindSubGraphsFromAdjacencyMatrix(bool[,] adjacencyMatrix)
         {
             List<List<int>> subGraphs = new List<List<int>>();
@@ -66,6 +83,11 @@ namespace VertexCover
             return subGraphs;
         }
 
+        /// <summary>
+        /// Turns a graph comprised of unconnected subgraphs into one singular conencted graph
+        /// </summary>
+        /// <param name="adjacencyMatrix">The initial graph</param>
+        /// <param name="subGraphs">The set of subgraphs on the initial graph</param>
         public void ConnectSubGraphsInAdjacencyMatrix(bool[,] adjacencyMatrix, int[][] subGraphs)
         {
             for (int i = 0; i < subGraphs.Length - 1; i++)
