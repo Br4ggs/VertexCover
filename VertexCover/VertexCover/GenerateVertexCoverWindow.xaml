@@ -10,5 +10,6 @@
         <TextBlock HorizontalAlignment="Center" Margin="0,27,0,0" Text="Enter number of nodes:" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBox x:Name="NodesTextBox" HorizontalAlignment="Center" Height="24" Margin="0,48,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" TextAlignment="Center" PreviewTextInput="NodesTextBox_PreviewTextInput" TextChanged="NodesTextBox_TextChanged"/>
         <Button Name="ConfirmButton"  Content="Generate" HorizontalAlignment="Left" Margin="158,149,0,0" Width="88" Click="ConfirmButton_Click" Height="28" VerticalAlignment="Top"/>
+        <CheckBox Name="PreprocessingCheckBox" Content="Use preprocessing" HorizontalAlignment="Center" Height="22" VerticalAlignment="Center" Width="124" Checked="PreprocessingCheckBox_Checked" Unchecked="PreprocessingCheckBox_UnChecked"/>
     </Grid>
 </Window>
