@@ -11,5 +11,6 @@
         <TextBox x:Name="NodesTextBox" HorizontalAlignment="Center" Height="24" Margin="0,48,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="92" TextAlignment="Center" PreviewTextInput="NodesTextBox_PreviewTextInput" TextChanged="NodesTextBox_TextChanged"/>
         <Button Name="ConfirmButton"  Content="Generate" HorizontalAlignment="Left" Margin="158,149,0,0" Width="88" Click="ConfirmButton_Click" Height="28" VerticalAlignment="Top"/>
         <CheckBox Name="PreprocessingCheckBox" Content="Use preprocessing" HorizontalAlignment="Center" Height="22" VerticalAlignment="Center" Width="124" Checked="PreprocessingCheckBox_Checked" Unchecked="PreprocessingCheckBox_UnChecked"/>
+        <ProgressBar Visibility="Hidden" Name="VertexCoverProgressBar" HorizontalAlignment="Left" Height="28" Margin="67,149,0,0" VerticalAlignment="Top" Width="270"/>
     </Grid>
 </Window>

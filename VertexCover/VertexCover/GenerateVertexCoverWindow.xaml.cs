@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Text.RegularExpressions;
-using VertexCover.Src;
 using System.Linq;
+using System.Threading.Tasks;
+using VertexCover.Extensions;
+using VertexCover.Utils;
 
 namespace VertexCover
 {
@@ -29,6 +26,8 @@ namespace VertexCover
 
         private GraphPreprocessor graphPreProcessor = new GraphPreprocessor();
 
+        private OptimizedProgressBar progressBar;
+
         public GenerateVertexCoverWindow(Graph graph)
         {
             Completed = false;
@@ -38,6 +37,7 @@ namespace VertexCover
 
             this.graph = graph;
             InitializeComponent();
+            progressBar = new OptimizedProgressBar(VertexCoverProgressBar);
         }
 
         private void NodesTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -64,9 +64,16 @@ namespace VertexCover
 
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmButton.Visibility = Visibility.Hidden;
+            Task task = new Task(() => FindVertexCover(CloseWindow));
+            task.Start();
+            progressBar.UI.Visibility = Visibility.Visible;
+        }
+
+        private void FindVertexCover(Action onVertexCoverFound)
+        {
             int vertexCoverSize = Nodes;
             Graph coveredGraph = graph;
-            //show loading screen
             if (UsePreprocessing)
             {
                 PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
@@ -74,9 +81,9 @@ namespace VertexCover
                 coveredGraph = attributes.ProcessedGraph;
                 vertexCoverSize -= attributes.IncludedVertices.Count();
 
-                foreach(Vertex discardedVertex in attributes.DiscardedVertices)
+                foreach (Vertex discardedVertex in attributes.DiscardedVertices)
                 {
-                    if(coveredGraph.Vertices.Count() >= vertexCoverSize)
+                    if (coveredGraph.Vertices.Count() >= vertexCoverSize)
                     {
                         break;
                     }
@@ -86,20 +93,30 @@ namespace VertexCover
                 }
             }
 
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(coveredGraph, vertexCoverSize);
-
-            if (cover == null)
+            progressBar.StartProgressBar((ulong)Math.Pow(2, graph.Vertices.Count), .05);
+            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize, OnVertexProcessed);
+            if (vertices.IsEmpty())
             {
                 VertexCover = new List<Vertex>();
             }
             else
             {
-                VertexCover.AddRange(cover);
+                VertexCover.AddRange(vertices);
             }
+            Application.Current.Dispatcher.Invoke(onVertexCoverFound);
+        }
 
+        private void OnVertexProcessed()
+        {
+            Application.Current.Dispatcher.Invoke(() => progressBar.TakeStep());
+        }
+
+        private void CloseWindow()
+        {
+            progressBar.UI.Value = 100;
+            progressBar.UI.UpdateLayout();
             Completed = true;
             Close();
         }
-
     }
 }

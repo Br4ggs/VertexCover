@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VertexCover.Extensions;
 using VertexCover.Src;
 
 namespace VertexCover.Tests
@@ -30,37 +31,37 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverSizeThree()
         {
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 3);
-            Stack<Vertex> answer = new Stack<Vertex>(new Vertex[]
+            List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 3);
+            List<Vertex> answer = new List<Vertex>()
             {
                 new Vertex(1),
                 new Vertex(3),
                 new Vertex(4)
-            });
-
+            };
+            answer.Reverse();
             CollectionAssert.AreEqual(cover, answer);
         }
 
         [TestMethod()]
         public void GetVertexCoverSizeFour()
         {
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 4);
-            Stack<Vertex> answer = new Stack<Vertex>(new Vertex[]
+            List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 4);
+            List<Vertex> answer = new List<Vertex>()
             {
                 new Vertex(0),
                 new Vertex(1),
                 new Vertex(3),
                 new Vertex(4)
-            });
-
+            };
+            answer.Reverse();
             CollectionAssert.AreEqual(cover, answer);
         }
 
         [TestMethod()]
         public void GetVertexCoverAllVertices()
         {
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count);
-            Stack<Vertex> answer = new Stack<Vertex>(new Vertex[]
+            List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count);
+            List<Vertex> answer = new List<Vertex>()
             {
                 new Vertex(0),
                 new Vertex(1),
@@ -69,7 +70,8 @@ namespace VertexCover.Tests
                 new Vertex(4),
                 new Vertex(5),
                 new Vertex(6),
-            });
+            };
+            answer.Reverse();
 
             CollectionAssert.AreEqual(cover, answer);
         }
@@ -78,25 +80,23 @@ namespace VertexCover.Tests
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible()
         {
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 1);
-
-            CollectionAssert.AreEqual(cover, null);
+            List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 1);
+            Assert.IsTrue(cover.IsEmpty());
         }
 
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_NoValidVertexCoverPossible_Size2()
         {
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 2);
-
-            CollectionAssert.AreEqual(cover, null);
+            List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, 2);
+            Assert.IsTrue(cover.IsEmpty());
         }
 
 
         [TestMethod()]
         public void GetVertexCoverThatIsNotPossible_LargerSizeThanGraph()
         {
-            Stack<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count + 1);
-            Assert.AreEqual(cover, null);
+            List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count + 1);
+            Assert.IsTrue(cover.IsEmpty());
         }
     }
 }
