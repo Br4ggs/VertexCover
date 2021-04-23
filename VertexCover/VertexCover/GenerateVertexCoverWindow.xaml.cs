@@ -73,6 +73,7 @@ namespace VertexCover
         private void FindVertexCover(Action onVertexCoverFound)
         {
             int vertexCoverSize = Nodes;
+            Graph coveredGraph = graph;
             if (UsePreprocessing)
             {
                 PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
@@ -80,9 +81,9 @@ namespace VertexCover
                 coveredGraph = attributes.ProcessedGraph;
                 vertexCoverSize -= attributes.IncludedVertices.Count();
 
-                foreach(Vertex discardedVertex in attributes.DiscardedVertices)
+                foreach (Vertex discardedVertex in attributes.DiscardedVertices)
                 {
-                    if(coveredGraph.Vertices.Count() >= vertexCoverSize)
+                    if (coveredGraph.Vertices.Count() >= vertexCoverSize)
                     {
                         break;
                     }
