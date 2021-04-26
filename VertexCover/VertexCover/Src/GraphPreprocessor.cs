@@ -5,8 +5,6 @@ using System.Text;
 
 namespace VertexCover
 {
-    //todo:
-    //-turn GraphKernelizer into an instance class
     public class GraphPreprocessor
     {
         private IGraphKernelizer graphKernelizer;
@@ -16,7 +14,7 @@ namespace VertexCover
             this.graphKernelizer = graphKernelizer;
         }
 
-        public PreProcessedGraphAttributes GetVertexCoverProcessedGraph(Graph graph)
+        public PreProcessedGraphAttributes GetProcessedGraph(Graph graph)
         {
             Graph preprocessedGraph = new Graph(graph);
             List<Vertex> includedVertices = new List<Vertex>();

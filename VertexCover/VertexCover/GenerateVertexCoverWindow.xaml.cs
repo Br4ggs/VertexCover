@@ -68,7 +68,7 @@ namespace VertexCover
             //show loading screen
             if(UsePreprocessing)
             {
-                PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
+                PreProcessedGraphAttributes attributes = graphPreProcessor.GetProcessedGraph(graph);
                 VertexCover.AddRange(attributes.IncludedVertices);
                 graph = attributes.ProcessedGraph;
                 vertexCoverSize -= attributes.IncludedVertices.Count();
