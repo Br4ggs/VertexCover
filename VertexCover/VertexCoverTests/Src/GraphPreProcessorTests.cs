@@ -42,7 +42,7 @@ namespace VertexCoverTests.Tests
         [TestInitialize]
         public void BeforeEach()
         {
-            graphPreprocessor = new GraphPreprocessor();
+            graphPreprocessor = new GraphPreprocessor(new VertexCoverGraphKernelizer());
         }
 
         [TestMethod()]

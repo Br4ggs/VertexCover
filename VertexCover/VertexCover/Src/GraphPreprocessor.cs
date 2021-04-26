@@ -9,12 +9,26 @@ namespace VertexCover
     //-turn GraphKernelizer into an instance class
     public class GraphPreprocessor
     {
+        private IGraphKernelizer graphKernelizer;
+
+        public GraphPreprocessor(IGraphKernelizer graphKernelizer)
+        {
+            this.graphKernelizer = graphKernelizer;
+        }
+
         public PreProcessedGraphAttributes GetVertexCoverProcessedGraph(Graph graph)
         {
             Graph preprocessedGraph = new Graph(graph);
             List<Vertex> includedVertices = new List<Vertex>();
-            IEnumerable<Vertex> pendants = GraphKernelizer.FindPendantVertices(graph);
-            IEnumerable<Vertex> independents = GraphKernelizer.FindIsolatedVertices(graph);
+
+            KernelizedAttributes attributes = graphKernelizer.FindKernelizedAttributes(graph, -1);
+
+            //IEnumerable<Vertex> pendants = GraphKernelizer.FindPendantVertices(graph);
+            //IEnumerable<Vertex> independents = GraphKernelizer.FindIsolatedVertices(graph);
+
+            IEnumerable<Vertex> pendants = attributes.Pendants;
+            IEnumerable<Vertex> independents = attributes.Independents;
+
             foreach (Vertex pendent in pendants)
             {
                 IEnumerable<Edge> connectedEdges = graph.GetEdges(pendent);

@@ -27,7 +27,7 @@ namespace VertexCover
 
         private Graph graph;
 
-        private GraphPreprocessor graphPreProcessor = new GraphPreprocessor();
+        private GraphPreprocessor graphPreProcessor = new GraphPreprocessor(new VertexCoverGraphKernelizer());
 
         public GenerateVertexCoverWindow(Graph graph)
         {
