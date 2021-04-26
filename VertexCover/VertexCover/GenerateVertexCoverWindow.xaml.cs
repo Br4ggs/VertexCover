@@ -94,7 +94,7 @@ namespace VertexCover
             }
 
             progressBar.StartProgressBar((ulong)Math.Pow(2, graph.Vertices.Count), .05);
-            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize, OnVertexProcessed);
+            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(coveredGraph, vertexCoverSize, OnVertexProcessed);
             if (vertices.IsEmpty())
             {
                 VertexCover = new List<Vertex>();

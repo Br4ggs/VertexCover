@@ -19,7 +19,7 @@ namespace VertexCover
             Graph preprocessedGraph = new Graph(graph);
             List<Vertex> includedVertices = new List<Vertex>();
 
-            KernelizedAttributes attributes = graphKernelizer.FindKernelizedAttributes(graph, -1);
+            KernelizedAttributes attributes = graphKernelizer.FindKernelizedAttributes(graph, -1); // -1 is because we don't need vertex tops
 
             //IEnumerable<Vertex> pendants = GraphKernelizer.FindPendantVertices(graph);
             //IEnumerable<Vertex> independents = GraphKernelizer.FindIsolatedVertices(graph);
@@ -51,24 +51,6 @@ namespace VertexCover
 
             PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices.Distinct(), pendants.Distinct(), preprocessedGraph);
             return preProcessedGraphAttributes;
-        }
-    }
-
-    public struct PreProcessedGraphAttributes
-    {
-        public IEnumerable<Vertex> IncludedVertices { get; }
-        
-        public IEnumerable<Vertex> DiscardedVertices { get; }
-        public Graph ProcessedGraph { get; }
-
-        public PreProcessedGraphAttributes(
-            IEnumerable<Vertex> includedVertices,
-            IEnumerable<Vertex> discardedVertices,
-            Graph processedGraph)
-        {
-            IncludedVertices = includedVertices;
-            DiscardedVertices = discardedVertices;
-            ProcessedGraph = processedGraph;
         }
     }
 }

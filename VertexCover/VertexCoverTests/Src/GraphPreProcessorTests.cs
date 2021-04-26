@@ -6,7 +6,7 @@ using System.Text;
 using VertexCover;
 
 //TODO: use mock for vertexcoverkernelizer
-namespace VertexCoverTests.Tests
+namespace VertexCover.Tests
 {
     [TestClass]
     public class GraphPreProcessorTests
