@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace VertexCover
 {
-    public static class GraphKernelizer
+    public class VertexCoverGraphKernelizer : IGraphKernelizer
     {
         /// <summary>
         /// Kernelize the graph for vertex cover
@@ -12,7 +12,7 @@ namespace VertexCover
         /// <param name="graph">The graph you want to kernelize</param>
         /// <param name="k"></param>
         /// <returns></returns>
-        public static KernelizedAttributes FindKernelizedAttributes(Graph graph, int k)
+        public KernelizedAttributes FindKernelizedAttributes(Graph graph, int k)
         {
             if (graph == null)
                 throw new ArgumentNullException(nameof(graph));
@@ -25,7 +25,7 @@ namespace VertexCover
         /// </summary>
         /// <param name="graph">The graph you want to query</param>
         /// <returns>The set of all vertices that are pendent</returns>
-        public static IEnumerable<Vertex> FindPendantVertices(Graph graph)
+        public IEnumerable<Vertex> FindPendantVertices(Graph graph)
         {
             if (graph == null)
                 throw new ArgumentNullException(nameof(graph));
@@ -39,7 +39,7 @@ namespace VertexCover
         /// <param name="graph">The graph you want to query</param>
         /// <param name="k">The k weights required</param>
         /// <returns>The set of all top vertices</returns>
-        public static IEnumerable<Vertex> FindTopVertices(Graph graph, int k)
+        public IEnumerable<Vertex> FindTopVertices(Graph graph, int k)
         {
             if (graph == null)
                 throw new ArgumentNullException(nameof(graph));
@@ -52,32 +52,12 @@ namespace VertexCover
         /// </summary>
         /// <param name="graph">The graph you want to query</param>
         /// <returns>The set of all vertices with no edges</returns>
-        public static IEnumerable<Vertex> FindIsolatedVertices(Graph graph)
+        public IEnumerable<Vertex> FindIsolatedVertices(Graph graph)
         {
             if (graph == null)
                 throw new ArgumentNullException(nameof(graph));
 
             return graph.Vertices.Where(vertex => !graph.GetEdges(vertex).Any());
-        }
-    }
-
-    public struct KernelizedAttributes
-    {
-        public IEnumerable<Vertex> Pendants { get; }
-        public IEnumerable<Vertex> Tops { get; }
-        public IEnumerable<Vertex> Independents { get; }
-        public Graph Graph { get; }
-
-        public KernelizedAttributes(
-            IEnumerable<Vertex> pendants,
-            IEnumerable<Vertex> tops,
-            IEnumerable<Vertex> independents,
-            Graph graph)
-        {
-            Pendants = pendants;
-            Tops = tops;
-            Independents = independents;
-            Graph = graph;
         }
     }
 }
