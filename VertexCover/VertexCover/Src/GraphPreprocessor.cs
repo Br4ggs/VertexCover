@@ -53,18 +53,4 @@ namespace VertexCover
             return preProcessedGraphAttributes;
         }
     }
-
-    public struct PreProcessedGraphAttributes
-    {
-        public IEnumerable<Vertex> IncludedVertices { get; }
-        public Graph ProcessedGraph { get; }
-
-        public PreProcessedGraphAttributes(
-            IEnumerable<Vertex> includedVertices,
-            Graph processedGraph)
-        {
-            IncludedVertices = includedVertices;
-            ProcessedGraph = processedGraph;
-        }
-    }
 }
