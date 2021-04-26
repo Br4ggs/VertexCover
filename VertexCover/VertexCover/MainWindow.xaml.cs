@@ -139,7 +139,8 @@ namespace VertexCover
                 return;
             }
 
-            VertexUtils.TransformVertexDegree(graph, vertices.Random(), 1);
+            Vertex independentVertex = vertices.FirstOrDefault(vertex => !graph.GetEdges(vertex).Any());
+            VertexUtils.TransformVertexDegree(graph, independentVertex ?? vertices.Random(), 1);
             DrawGraph(graph, attributes);
         }
 
