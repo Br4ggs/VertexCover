@@ -7,7 +7,6 @@ namespace VertexCover
     public struct PreProcessedGraphAttributes
     {
         public IEnumerable<Vertex> IncludedVertices { get; }
-
         public IEnumerable<Vertex> DiscardedVertices { get; }
         public Graph ProcessedGraph { get; }
 

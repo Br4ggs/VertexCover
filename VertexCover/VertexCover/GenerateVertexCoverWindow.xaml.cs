@@ -25,7 +25,6 @@ namespace VertexCover
         private Graph graph;
 
         private GraphPreprocessor graphPreProcessor = new GraphPreprocessor(new VertexCoverGraphKernelizer());
-
         private OptimizedProgressBar progressBar;
 
         public GenerateVertexCoverWindow(Graph graph)
