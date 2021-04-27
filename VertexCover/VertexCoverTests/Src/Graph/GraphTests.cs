@@ -135,10 +135,10 @@ namespace VertexCover.Tests
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
         public void GetEdgesTest_UnknownVertex()
         {
-            List<Edge> edges = new List<Edge>();
-            CollectionAssert.AreEqual(graph.GetEdges(new Vertex(2398)).ToArray(), edges);
+            graph.GetEdges(new Vertex(2398));
         }
 
         [TestMethod()]

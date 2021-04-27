@@ -21,6 +21,8 @@ namespace VertexCover
         public IReadOnlyCollection<Vertex> Vertices => vertices;
         private readonly List<Vertex> vertices;
 
+        private readonly Dictionary<Vertex, List<Edge>> edgeCache;
+
         /// <summary>
         /// Generate Graph from adjacencyMatrix
         /// </summary>
@@ -35,21 +37,15 @@ namespace VertexCover
 
             edges = new List<Edge>();
             vertices = new List<Vertex>();
+            edgeCache = new Dictionary<Vertex, List<Edge>>();
             CreateVertices(size);
 
             for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < size && i != j; j++)
                 {
-                    if (i == j)
-                    {
-                        break;
-                    }
-
-                    if (!adjacencyMatrix[i, j])
-                        continue;
-
-                    edges.Add(new Edge(vertices[j], vertices[i]));
+                    if (adjacencyMatrix[i, j])
+                        AddEdge(new Edge(vertices[j], vertices[i]));
                 }
             }
         }
@@ -62,18 +58,17 @@ namespace VertexCover
         {
             edges = new List<Edge>();
             vertices = new List<Vertex>();
-
+            edgeCache = new Dictionary<Vertex, List<Edge>>();
             foreach (var vertex in graph.Vertices)
             {
-                vertices.Add(new Vertex(vertex.ID));
+                AddVertex(new Vertex(vertex.ID));
             }
 
             foreach (var edge in graph.Edges)
             {
                 Vertex vertex = vertices.Find(vertex1 => vertex1.ID == edge.StartVertex.ID);
                 Vertex vertex2 = vertices.Find(vertex1 => vertex1.ID == edge.EndVertex.ID);
-
-                edges.Add(new Edge(vertex, vertex2));
+                AddEdge(new Edge(vertex, vertex2));
             }
         }
 
@@ -85,7 +80,7 @@ namespace VertexCover
         {
             for (int i = 0; i < size; i++)
             {
-                vertices.Add(new Vertex(i));
+                AddVertex(new Vertex(i));
             }
         }
 
@@ -117,7 +112,10 @@ namespace VertexCover
             if (vertex == null)
                 throw new ArgumentNullException(nameof(vertex));
 
-            return Edges.Where(edge => Equals(edge.StartVertex, vertex) || Equals(edge.EndVertex, vertex));
+            if (!edgeCache.ContainsKey(vertex))
+                throw new ArgumentException($"{nameof(vertex)} does not belong to this graph.");
+
+            return edgeCache[vertex];
         }
 
         /// <summary>
@@ -130,9 +128,11 @@ namespace VertexCover
                 throw new ArgumentNullException(nameof(edge));
 
             if (!vertices.Contains(edge.StartVertex) || !vertices.Contains(edge.EndVertex))
-            {
                 throw new ArgumentException();
-            }
+
+            edgeCache[edge.StartVertex].Add(edge);
+            if (!Equals(edge.StartVertex, edge.EndVertex))
+                edgeCache[edge.EndVertex].Add(edge);
             edges.Add(edge);
         }
 
@@ -143,6 +143,12 @@ namespace VertexCover
         /// <returns>True if the edge was removed false if it was not</returns>
         public bool RemoveEdge(Edge edge)
         {
+            if (!Edges.Contains(edge))
+                return false;
+
+            edgeCache[edge.StartVertex].Remove(edge);
+            edgeCache[edge.EndVertex].Remove(edge);
+
             return edges.Remove(edge);
         }
 
@@ -155,11 +161,10 @@ namespace VertexCover
             if (vertex == null)
                 throw new ArgumentNullException(nameof(vertex));
 
-            if (vertices.Contains(vertex))
-            {
+            if (edgeCache.ContainsKey(vertex))
                 throw new ArgumentException($"{nameof(vertex)} is already inside of the graph");
-            }
 
+            edgeCache.Add(vertex, new List<Edge>());
             vertices.Add(vertex);
         }
 
@@ -170,7 +175,7 @@ namespace VertexCover
         /// <returns>True it was successfully removed</returns>
         public bool RemoveVertex(Vertex vertex)
         {
-            if (!vertices.Contains(vertex))
+            if (!edgeCache.ContainsKey(vertex))
                 return false;
 
             var invalidEdges = GetEdges(vertex).ToArray();
