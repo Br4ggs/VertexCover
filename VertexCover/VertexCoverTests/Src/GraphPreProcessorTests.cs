@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using VertexCover;
 
-namespace VertexCoverTests.Tests
+//TODO: use mock for vertexcoverkernelizer
+namespace VertexCover.Tests
 {
     [TestClass]
     public class GraphPreProcessorTests
@@ -42,14 +43,14 @@ namespace VertexCoverTests.Tests
         [TestInitialize]
         public void BeforeEach()
         {
-            graphPreprocessor = new GraphPreprocessor();
+            graphPreprocessor = new GraphPreprocessor(new VertexCoverGraphKernelizer());
         }
 
         [TestMethod()]
         public void PreprocessesGraphAndReturnsPreProcessedGraphAttributes()
         {
             Graph graphWithTwoPendants = new Graph(matrixWithTwoPendants);
-            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetVertexCoverProcessedGraph(graphWithTwoPendants);
+            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithTwoPendants);
             
             Assert.AreEqual(1, graphAttributes.IncludedVertices.Count());
             Assert.AreEqual(2, graphAttributes.IncludedVertices.ElementAt(0).ID);
@@ -66,7 +67,7 @@ namespace VertexCoverTests.Tests
         public void PreprocessesGraphAndReturnsSameGraph()
         {
             Graph graphWithNoPendants = new Graph(matrixWithNoPendants);
-            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetVertexCoverProcessedGraph(graphWithNoPendants);
+            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithNoPendants);
 
             Assert.AreEqual(graphAttributes.IncludedVertices.Count(), 0);
 
@@ -78,7 +79,7 @@ namespace VertexCoverTests.Tests
         public void PreprocessesGraphAndReturnsAllVertices()
         {
             Graph graphWithThreePendants = new Graph(matrixWithThreePendants);
-            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetVertexCoverProcessedGraph(graphWithThreePendants);
+            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithThreePendants);
 
             Assert.AreEqual(graphAttributes.IncludedVertices.Count(), 3);
             Assert.AreEqual(graphAttributes.IncludedVertices.ElementAt(0).ID, 1);

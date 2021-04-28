@@ -5,16 +5,28 @@ using System.Text;
 
 namespace VertexCover
 {
-    //todo:
-    //-turn GraphKernelizer into an instance class
     public class GraphPreprocessor
     {
-        public PreProcessedGraphAttributes GetVertexCoverProcessedGraph(Graph graph)
+        private IGraphKernelizer graphKernelizer;
+
+        public GraphPreprocessor(IGraphKernelizer graphKernelizer)
+        {
+            this.graphKernelizer = graphKernelizer;
+        }
+
+        public PreProcessedGraphAttributes GetProcessedGraph(Graph graph)
         {
             Graph preprocessedGraph = new Graph(graph);
             List<Vertex> includedVertices = new List<Vertex>();
-            IEnumerable<Vertex> pendants = GraphKernelizer.FindPendantVertices(graph);
-            IEnumerable<Vertex> independents = GraphKernelizer.FindIsolatedVertices(graph);
+
+            KernelizedAttributes attributes = graphKernelizer.FindKernelizedAttributes(graph, -1); // -1 is because we don't need vertex tops
+
+            //IEnumerable<Vertex> pendants = GraphKernelizer.FindPendantVertices(graph);
+            //IEnumerable<Vertex> independents = GraphKernelizer.FindIsolatedVertices(graph);
+
+            IEnumerable<Vertex> pendants = attributes.Pendants;
+            IEnumerable<Vertex> independents = attributes.Independents;
+
             foreach (Vertex pendent in pendants)
             {
                 IEnumerable<Edge> connectedEdges = graph.GetEdges(pendent);
@@ -39,24 +51,6 @@ namespace VertexCover
 
             PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices.Distinct(), pendants.Distinct(), preprocessedGraph);
             return preProcessedGraphAttributes;
-        }
-    }
-
-    public struct PreProcessedGraphAttributes
-    {
-        public IEnumerable<Vertex> IncludedVertices { get; }
-        
-        public IEnumerable<Vertex> DiscardedVertices { get; }
-        public Graph ProcessedGraph { get; }
-
-        public PreProcessedGraphAttributes(
-            IEnumerable<Vertex> includedVertices,
-            IEnumerable<Vertex> discardedVertices,
-            Graph processedGraph)
-        {
-            IncludedVertices = includedVertices;
-            DiscardedVertices = discardedVertices;
-            ProcessedGraph = processedGraph;
         }
     }
 }

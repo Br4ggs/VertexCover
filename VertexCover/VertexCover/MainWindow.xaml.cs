@@ -20,6 +20,7 @@ namespace VertexCover
     public partial class MainWindow : Window
     {
         private readonly MatrixBuilder matrixBuilder = new MatrixBuilder();
+        private readonly VertexCoverGraphKernelizer graphKernelizer = new VertexCoverGraphKernelizer();
         private Graph graph;
         private GraphVizAttributes attributes = new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
 
@@ -118,7 +119,7 @@ namespace VertexCover
 
         private void RemoveTopVertex_Click(object sender, RoutedEventArgs e)
         {
-            IEnumerable<Vertex> vertices = GraphKernelizer.FindTopVertices(graph, (int)kSize);
+            IEnumerable<Vertex> vertices = graphKernelizer.FindTopVertices(graph, (int)kSize);
 
             if (vertices.IsEmpty())
             {
@@ -146,7 +147,7 @@ namespace VertexCover
 
         private void RemovePendent_Click(object sender, RoutedEventArgs e)
         {
-            IEnumerable<Vertex> vertices = GraphKernelizer.FindPendantVertices(graph);
+            IEnumerable<Vertex> vertices = graphKernelizer.FindPendantVertices(graph);
             if (vertices.IsEmpty())
             {
                 VertexCoverOutput.Text = "This graph has no pendent vertices";
@@ -179,7 +180,7 @@ namespace VertexCover
         {
             attributes.Clear();
             attributes.LabelElementsNumeric(graph.Vertices);
-            KernelizedAttributes kernelized = GraphKernelizer.FindKernelizedAttributes(graph, (int)kSize);
+            KernelizedAttributes kernelized = graphKernelizer.FindKernelizedAttributes(graph, (int)kSize);
 
             // Color neighbours of pendants
             List<Vertex> vertices = new List<Vertex>();

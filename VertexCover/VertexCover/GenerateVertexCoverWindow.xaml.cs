@@ -24,8 +24,7 @@ namespace VertexCover
 
         private Graph graph;
 
-        private GraphPreprocessor graphPreProcessor = new GraphPreprocessor();
-
+        private GraphPreprocessor graphPreProcessor = new GraphPreprocessor(new VertexCoverGraphKernelizer());
         private OptimizedProgressBar progressBar;
 
         public GenerateVertexCoverWindow(Graph graph)
@@ -76,7 +75,7 @@ namespace VertexCover
             Graph coveredGraph = graph;
             if (UsePreprocessing)
             {
-                PreProcessedGraphAttributes attributes = graphPreProcessor.GetVertexCoverProcessedGraph(graph);
+                PreProcessedGraphAttributes attributes = graphPreProcessor.GetProcessedGraph(graph);
                 VertexCover.AddRange(attributes.IncludedVertices);
                 coveredGraph = attributes.ProcessedGraph;
                 vertexCoverSize -= attributes.IncludedVertices.Count();
@@ -94,7 +93,7 @@ namespace VertexCover
             }
 
             progressBar.StartProgressBar((ulong)Math.Pow(2, graph.Vertices.Count), .05);
-            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(graph, vertexCoverSize, OnVertexProcessed);
+            List<Vertex> vertices = VertexCoverUtils.GetVertexCover(coveredGraph, vertexCoverSize, OnVertexProcessed);
             if (vertices.IsEmpty())
             {
                 VertexCover = new List<Vertex>();
