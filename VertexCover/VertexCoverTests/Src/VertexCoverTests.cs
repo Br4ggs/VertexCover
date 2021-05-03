@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VertexCover.Extensions;
-using VertexCover.Src;
 
 namespace VertexCover.Tests
 {
@@ -72,7 +72,6 @@ namespace VertexCover.Tests
                 new Vertex(6),
             };
             answer.Reverse();
-
             CollectionAssert.AreEqual(cover, answer);
         }
 
@@ -97,6 +96,29 @@ namespace VertexCover.Tests
         {
             List<Vertex> cover = VertexCoverUtils.GetVertexCover(graph, graph.Vertices.Count + 1);
             Assert.IsTrue(cover.IsEmpty());
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ApproximateVertexCoverTest()
+        {
+            VertexCoverUtils.ApproximateVertexCover(null);
+        }
+
+        [TestMethod()]
+        public void ApproximateVertexCoverTest_GraphNull()
+        {
+            List<Vertex> answer = new List<Vertex>()
+            {
+                new Vertex(0),
+                new Vertex(1),
+                new Vertex(2),
+                new Vertex(3),
+                new Vertex(4),
+                new Vertex(5),
+            };
+
+            CollectionAssert.AreEqual(answer, VertexCoverUtils.ApproximateVertexCover(graph));
         }
     }
 }
