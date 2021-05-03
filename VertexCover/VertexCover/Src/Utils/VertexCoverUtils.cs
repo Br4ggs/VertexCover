@@ -19,7 +19,6 @@ namespace VertexCover
             if (size <= graph.Vertices.Count)
                 IsVertexCoverPossible(graph, cover, 0, size, onVertexProcessed);
 
-
             return cover.ToList();
         }
 
@@ -54,6 +53,34 @@ namespace VertexCover
 
             cover.Pop();
             return IsVertexCoverPossible(graph, cover, depth + 1, requestSize, onVertexProcessed);
+        }
+
+        /// <summary>
+        /// Get an approximation of the vertex cover
+        /// </summary>
+        /// <param name="graph">The graph you want to use to generate the approximate vertex cover</param>
+        /// <returns>The vertex cover</returns>
+        public static List<Vertex> ApproximateVertexCover(Graph graph)
+        {
+            if (graph == null)
+                throw new ArgumentNullException(nameof(graph));
+
+            graph = new Graph(graph);
+            List<Vertex> cover = new List<Vertex>();
+
+            while (graph.Edges.Any())
+            {
+                Edge edge = graph.Edges.First();
+                graph.RemoveVertex(edge.StartVertex);
+                cover.Add(edge.StartVertex);
+
+                if (!Equals(edge.StartVertex, edge.EndVertex))
+                {
+                    cover.Add(edge.EndVertex);
+                    graph.RemoveVertex(edge.EndVertex);
+                }
+            }
+            return cover.ToList();
         }
 
         /// <summary>
