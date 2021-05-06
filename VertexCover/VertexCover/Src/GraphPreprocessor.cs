@@ -38,7 +38,7 @@ namespace VertexCover
                 else if (pendants.Any())
                 {
                     Vertex pendant = pendants.First();
-                    Edge edge = graph.GetEdges(pendant).First();
+                    Edge edge = preprocessedGraph.GetEdges(pendant).First();
 
                     Vertex neighbour = (pendant.Equals(edge.StartVertex)) ? edge.EndVertex : edge.StartVertex;
                     includedVertices.Add(neighbour);
