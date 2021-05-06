@@ -21,6 +21,7 @@ namespace VertexCover
         public int Nodes { get; private set; }
         public List<Vertex> VertexCover { get; private set; }
         public bool UsePreprocessing { get; private set; }
+        public bool UseVertexTops { get; private set; }
 
         private Graph graph;
 
@@ -64,8 +65,10 @@ namespace VertexCover
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             ConfirmButton.Visibility = Visibility.Hidden;
+
             Task task = new Task(() => FindVertexCover(CloseWindow));
             task.Start();
+
             progressBar.UI.Visibility = Visibility.Visible;
         }
 
@@ -75,22 +78,30 @@ namespace VertexCover
             Graph coveredGraph = graph;
             if (UsePreprocessing)
             {
-                PreProcessedGraphAttributes attributes = graphPreProcessor.GetProcessedGraph(graph);
+                PreProcessedGraphAttributes attributes = graphPreProcessor.GetProcessedGraph(coveredGraph, vertexCoverSize);
                 VertexCover.AddRange(attributes.IncludedVertices);
                 coveredGraph = attributes.ProcessedGraph;
-                vertexCoverSize -= attributes.IncludedVertices.Count();
+                vertexCoverSize = attributes.ProcessedDegree;
 
-                foreach (Vertex discardedVertex in attributes.DiscardedVertices)
+                foreach (Vertex discardedvertex in attributes.DiscardedVertices)
                 {
                     if (coveredGraph.Vertices.Count() >= vertexCoverSize)
                     {
                         break;
                     }
 
-                    VertexCover.Add(discardedVertex);
+                    VertexCover.Add(discardedvertex);
                     vertexCoverSize--;
                 }
+
+                if (vertexCoverSize < 1 && coveredGraph.Edges.Count < 1)
+                {
+                    Application.Current.Dispatcher.Invoke(onVertexCoverFound);
+                    return;
+                }
             }
+
+            //Todo(?): add check for premature abort when processed graph size is greater than square root of processed vertex cover size
 
             progressBar.StartProgressBar((ulong)Math.Pow(2, graph.Vertices.Count), .05);
             List<Vertex> vertices = VertexCoverUtils.GetVertexCover(coveredGraph, vertexCoverSize, OnVertexProcessed);
@@ -102,6 +113,7 @@ namespace VertexCover
             {
                 VertexCover.AddRange(vertices);
             }
+
             Application.Current.Dispatcher.Invoke(onVertexCoverFound);
         }
 
