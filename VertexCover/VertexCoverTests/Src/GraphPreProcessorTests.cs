@@ -50,7 +50,7 @@ namespace VertexCover.Tests
         public void PreprocessesGraphAndReturnsPreProcessedGraphAttributes()
         {
             Graph graphWithTwoPendants = new Graph(matrixWithTwoPendants);
-            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithTwoPendants);
+            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithTwoPendants, 5);
             
             Assert.AreEqual(1, graphAttributes.IncludedVertices.Count());
             Assert.AreEqual(2, graphAttributes.IncludedVertices.ElementAt(0).ID);
@@ -67,7 +67,7 @@ namespace VertexCover.Tests
         public void PreprocessesGraphAndReturnsSameGraph()
         {
             Graph graphWithNoPendants = new Graph(matrixWithNoPendants);
-            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithNoPendants);
+            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithNoPendants, 4);
 
             Assert.AreEqual(graphAttributes.IncludedVertices.Count(), 0);
 
@@ -79,9 +79,9 @@ namespace VertexCover.Tests
         public void PreprocessesGraphAndReturnsAllVertices()
         {
             Graph graphWithThreePendants = new Graph(matrixWithThreePendants);
-            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithThreePendants);
+            PreProcessedGraphAttributes graphAttributes = graphPreprocessor.GetProcessedGraph(graphWithThreePendants, 6);
 
-            Assert.AreEqual(graphAttributes.IncludedVertices.Count(), 3);
+            Assert.AreEqual(3, graphAttributes.IncludedVertices.Count());
             Assert.AreEqual(graphAttributes.IncludedVertices.ElementAt(0).ID, 1);
             Assert.AreEqual(graphAttributes.IncludedVertices.ElementAt(1).ID, 2);
             Assert.AreEqual(graphAttributes.IncludedVertices.ElementAt(2).ID, 4);
