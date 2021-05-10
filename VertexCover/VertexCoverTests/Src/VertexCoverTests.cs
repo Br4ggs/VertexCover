@@ -100,13 +100,13 @@ namespace VertexCover.Tests
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ApproximateVertexCoverTest()
+        public void ApproximateVertexCoverTest_GraphNull()
         {
             VertexCoverUtils.ApproximateVertexCover(null);
         }
 
         [TestMethod()]
-        public void ApproximateVertexCoverTest_GraphNull()
+        public void ApproximateVertexCoverTest()
         {
             List<Vertex> answer = new List<Vertex>()
             {
