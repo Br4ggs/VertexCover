@@ -17,6 +17,12 @@ namespace VertexCover
             if (graph == null)
                 throw new ArgumentNullException(nameof(graph));
 
+            IEnumerable<Vertex> isolatedVertices = FindIsolatedVertices(graph); //these will be discarded outright
+
+            IEnumerable<Vertex> pendantVertices = FindPendantVertices(graph); //these will be added to the vertex cover, decrease k by the amount found
+
+            IEnumerable<Vertex> topVertices = FindTopVertices(graph, k);
+
             return new KernelizedAttributes(FindPendantVertices(graph), FindTopVertices(graph, k), FindIsolatedVertices(graph), graph);
         }
 
