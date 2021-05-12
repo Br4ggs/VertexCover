@@ -1,12 +1,14 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
+﻿using System.Windows.Controls;
 
 namespace VertexCover.Utils
 {
     public class OptimizedProgressBar
     {
+        /// <summary>
+        /// Get the base UI element that is used
+        /// </summary>
         public ProgressBar UI { get; }
+
         public ulong Steps { get; private set; }
         public double ProgressPerChunk { get; private set; }
         public ulong ChunkSize { get; private set; }

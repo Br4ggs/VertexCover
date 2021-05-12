@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Markup.Localizer;
-using VertexCover.Extensions;
 
 namespace VertexCover.Utils
 {

@@ -1,11 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VertexCover
 {
     public static class VertexCoverUtils
     {
+        /// <summary>
+        /// A version of the vertex cover that uses a task to run the 
+        /// </summary>
+        /// <param name="graph">The graph you want to use to generate the vertex cover</param>
+        /// <param name="size">The size of the vertex cover</param>
+        /// <param name="baseCover">The base values for the vertex cover</param>
+        /// <param name="onVertexProcessed">Called each time a vertex has been checked</param>
+        /// <returns>A list of vertices</returns>
+        public static List<Vertex> GetVertexCover(Graph graph,
+                                                  int size,
+                                                  IEnumerable<Vertex> baseCover,
+                                                  Action onVertexProcessed = null)
+        {
+            Stack<Vertex> cover = new Stack<Vertex>(baseCover);
+            if (size > graph.Vertices.Count || !IsVertexCoverPossible(graph, cover, 0, size, onVertexProcessed))
+            {
+                cover.Clear();
+            }
+            return cover.ToList();
+        }
+
+
         /// <summary>
         /// Get a vertex cover
         /// </summary>
@@ -15,11 +38,7 @@ namespace VertexCover
         /// <returns>The vertex cover</returns>
         public static List<Vertex> GetVertexCover(Graph graph, int size, Action onVertexProcessed = null)
         {
-            Stack<Vertex> cover = new Stack<Vertex>();
-            if (size <= graph.Vertices.Count)
-                IsVertexCoverPossible(graph, cover, 0, size, onVertexProcessed);
-
-            return cover.ToList();
+            return GetVertexCover(graph, size, Enumerable.Empty<Vertex>(), onVertexProcessed);
         }
 
         /// <summary>

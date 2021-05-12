@@ -7,6 +7,49 @@
         mc:Ignorable="d"
         Title="VertexCoverPerformanceWindow" Height="450" Width="800">
     <Grid>
-        
+        <TextBlock HorizontalAlignment="Left" Margin="146,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="37" Width="141" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="-0.233"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-0.388"/>
+                </TransformGroup>
+            </TextBlock.RenderTransform><Run Language="en-gb" Text="Max Size"/></TextBlock>
+        <TextBox x:Name="MaxSizeTextBox" HorizontalAlignment="Left" Height="29" Margin="145,62,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="142" TextAlignment="Center" PreviewTextInput="Number_PreviewTextInput" TextChanged="MaxSizeTextBox_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="344,247,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="38" Width="156"><Run Text="What percent of the size should be used for k size"/></TextBlock>
+        <TextBlock x:Name="KPercentageIndicator" HorizontalAlignment="Left" Height="28" Margin="387,285,0,0" Text="50%" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" TextAlignment="Center"/>
+        <Slider x:Name="KPercentageSlider" Margin="174,313,130,0" Height="24" VerticalAlignment="Top" Minimum="0" Maximum="100" Value="50" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="KPercentageSlider_ValueChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="352,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="37" Width="141" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="-0.233"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-0.388"/>
+                </TransformGroup>
+            </TextBlock.RenderTransform><Run Language="en-gb" Text="Incrementation size:"/></TextBlock>
+        <TextBox x:Name="IncrementSizeTextBox" HorizontalAlignment="Left" Height="29" Margin="351,62,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="142" TextAlignment="Center" PreviewTextInput="Number_PreviewTextInput" TextChanged="IncrementSizeTextBox_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="556,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="37" Width="141" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleY="-0.233"/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-0.388"/>
+                </TransformGroup>
+            </TextBlock.RenderTransform><Run Language="en-gb" Text="Repetitions"/></TextBlock>
+        <TextBox x:Name="RepetitionsTextBox" HorizontalAlignment="Left" Height="29" Margin="555,62,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="142" TextAlignment="Center" PreviewTextInput="Number_PreviewTextInput" TextChanged="RepetitionsTextBox_TextChanged" />
+        <Button Content="Test performance" HorizontalAlignment="Left" Margin="321,352,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="58" Width="198" Click="TestButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.176"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+
     </Grid>
 </Window>

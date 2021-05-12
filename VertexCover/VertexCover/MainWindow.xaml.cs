@@ -19,8 +19,12 @@ namespace VertexCover
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MatrixBuilder matrixBuilder = new MatrixBuilder();
-        private readonly VertexCoverGraphKernelizer graphKernelizer = new VertexCoverGraphKernelizer();
+        private readonly MatrixBuilder matrixBuilder;
+        private readonly VertexCoverGraphKernelizer graphKernelizer;
+        private readonly GraphPreprocessor graphPreProcessor;
+
+        private readonly VertexCoverPerformance performance;
+
         private Graph graph;
         private GraphVizAttributes attributes = new GraphVizAttributes("my_graph", "Arial", "filled,setlinewidth(4)", "circle");
 
@@ -29,6 +33,10 @@ namespace VertexCover
         public MainWindow()
         {
             InitializeComponent();
+            matrixBuilder = new MatrixBuilder();
+            graphKernelizer = new VertexCoverGraphKernelizer();
+            graphPreProcessor = new GraphPreprocessor(graphKernelizer);
+            performance = new VertexCoverPerformance(graphPreProcessor, matrixBuilder);
 
             GenerateDefaultGraph();
         }
@@ -194,6 +202,13 @@ namespace VertexCover
             attributes.ColorElements(kernelized.Tops, Color.Red);
 
             attributes.ColorElements(kernelized.Independents, Color.Green);
+        }
+
+        private void PerformanceTestButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            VertexCoverPerformanceWindow generateVertexCoverWindow = new VertexCoverPerformanceWindow(performance);
+            generateVertexCoverWindow.ShowDialog();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace VertexCover
 
             IEnumerable<Vertex> topVertices = FindTopVertices(graph, k);
 
-            return new KernelizedAttributes(FindPendantVertices(graph), FindTopVertices(graph, k), FindIsolatedVertices(graph), graph);
+            return new KernelizedAttributes(pendantVertices, topVertices, isolatedVertices, graph);
         }
 
         /// <summary>

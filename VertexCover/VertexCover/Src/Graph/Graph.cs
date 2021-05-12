@@ -183,7 +183,6 @@ namespace VertexCover
             {
                 RemoveEdge(edge);
             }
-            edgeCache.Remove(vertex);
             return vertices.Remove(vertex);
         }
     }
