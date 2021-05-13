@@ -9,13 +9,14 @@
     <Grid>
         <Button Content="Generate new Graph" HorizontalAlignment="Left" Height="29" Margin="10,10,0,0" VerticalAlignment="Top" Width="156" Click="GenerateGraphButton_Click"/>
         <Image x:Name="ImageBox" HorizontalAlignment="Left" Height="380" Margin="192,24,0,0" VerticalAlignment="Top" Width="589"/>
-        <Button Content="Generate vertex cover" HorizontalAlignment="Left" Height="29" Margin="10,54,0,0" VerticalAlignment="Top" Width="156" Click="GenerateVertexCoverButton_Click"/>
-        <TextBlock x:Name="VertexCoverOutput" Text="" TextAlignment="Center" TextWrapping="Wrap" Margin="10,88,608,199"/>
+        <Button Content="Generate vertex cover" HorizontalAlignment="Left" Height="29" Margin="10,44,0,0" VerticalAlignment="Top" Width="156" Click="GenerateVertexCoverButton_Click"/>
+        <TextBlock x:Name="VertexCoverOutput" Text="" TextAlignment="Center" TextWrapping="Wrap" Margin="10,112,634,199"/>
         <Button Content="p++" HorizontalAlignment="Left" Margin="88,240,0,0" VerticalAlignment="Top" Height="54" Width="75" Click="AddPendent_Click"/>
         <Button Content="p--" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Height="54" Width="75" Click="RemovePendent_Click"/>
         <Button Content="t--" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top" Height="54" Width="75" Click="RemoveTopVertex_Click"/>
         <Button Content="t++" HorizontalAlignment="Left" Margin="88,299,0,0" VerticalAlignment="Top" Height="54" Width="75" Click="AddTopVertex_Click"/>
         <TextBox x:Name="NodesTextBox" HorizontalAlignment="Left" Height="24" Margin="10,365,0,0" Text="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="153" TextAlignment="Center" PreviewTextInput="NodesTextBox_PreviewTextInput" TextChanged="NodesTextBox_TextChanged"/>
         <Button Content="Color Kernilization" HorizontalAlignment="Left" Height="21" Margin="10,394,0,0" VerticalAlignment="Top" Width="153" Click="ColorButton_Click"/>
+        <Button x:Name="PerformanceTestButton" Content="Test performance" HorizontalAlignment="Left" Height="29" Margin="10,78,0,0" VerticalAlignment="Top" Width="156" Click="PerformanceTestButton_Click"/>
     </Grid>
 </Window>

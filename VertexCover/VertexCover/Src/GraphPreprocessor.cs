@@ -23,7 +23,7 @@ namespace VertexCover
 
             int processedK = k;
 
-            while(processedK > 0)
+            while (processedK > 0)
             {
                 IEnumerable<Vertex> tops = graphKernelizer.FindTopVertices(preprocessedGraph, processedK);
                 IEnumerable<Vertex> pendants = graphKernelizer.FindPendantVertices(preprocessedGraph);
@@ -53,7 +53,7 @@ namespace VertexCover
                 IEnumerable<Vertex> isolated = graphKernelizer.FindIsolatedVertices(preprocessedGraph);
                 discardedVertices.AddRange(isolated);
 
-                for(int i = isolated.Count() - 1; i >= 0; i--)
+                for (int i = isolated.Count() - 1; i >= 0; i--)
                 {
                     preprocessedGraph.RemoveVertex(isolated.ElementAt(i));
                 }
@@ -61,6 +61,31 @@ namespace VertexCover
 
             PreProcessedGraphAttributes preProcessedGraphAttributes = new PreProcessedGraphAttributes(includedVertices.Distinct(), discardedVertices.Distinct(), preprocessedGraph, processedK);
             return preProcessedGraphAttributes;
+        }
+        /// <summary>
+        /// Get the base vertices from the preprocessed 
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+        public List<Vertex> GetBaseVertexCover(PreProcessedGraphAttributes attributes)
+        {
+            List<Vertex> vertexCover = attributes.IncludedVertices.ToList();
+
+            var coveredGraph = attributes.ProcessedGraph;
+            var vertexCoverSize = attributes.ProcessedDegree;
+
+            foreach (Vertex discardedVertex in attributes.DiscardedVertices)
+            {
+                if (coveredGraph.Vertices.Count() >= vertexCoverSize)
+                {
+                    break;
+                }
+
+                vertexCover.Add(discardedVertex);
+                vertexCoverSize--;
+            }
+
+            return vertexCover;
         }
     }
 }
