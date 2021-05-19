@@ -65,45 +65,27 @@ namespace VertexCover
 
             List<Vertex> vertexCover = generateVertexCoverWindow.VertexCover;
 
-            if (vertexCover.IsEmpty())
-            {
-                VertexCoverOutput.Text = "No suitable vertex cover could be found";
+            DisplayVertexCover(graph, vertexCover);
+        }
+
+        private void ApproximateVertexCoverButton_Click(object sender, RoutedEventArgs e)
+        {
+            ApproximateVertexCoverWindow approximateVertexCoverWindow = new ApproximateVertexCoverWindow(graph);
+            approximateVertexCoverWindow.ShowDialog();
+
+            if (!approximateVertexCoverWindow.Completed)
                 return;
-            }
 
-            string edges = vertexCover.Aggregate("", (current, vertex) => current + (vertex.ID + " "));
+            List<Vertex> vertexCover = approximateVertexCoverWindow.VertexCover;
 
-            attributes.Clear();
-            attributes.LabelElementsNumeric(graph.Vertices);
-            attributes.ColorElements(vertexCover, Color.Green);
-            attributes.ColorElements(graph.Edges, Color.Green);
-
-            VertexCoverOutput.Text = "Vertices: " + edges + "form biggest vertex cover for graph";
-            DrawGraph(graph, attributes);
+            DisplayVertexCover(graph, vertexCover);
         }
 
-        private void DrawGraph(Graph graph, GraphVizAttributes attributes)
+        private void PerformanceTestButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                Uri location = GraphViz.CreateGraphImage($"graph{imagesGenerated++}", graph, attributes);
-                ImageBox.Source = new BitmapImage(location);
-            }
-            catch (Win32Exception)
-            {
-                MessageBox.Show("Please install GraphViz at C:\\Program Files\\Graphviz\\bin\\dot.exe");
-            }
-            catch (OutOfMemoryException)
-            {
-                MessageBox.Show("The maximum size has been reached please create a smaller graph");
-            }
-        }
 
-        private void GenerateDefaultGraph()
-        {
-            graph = new Graph(matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50));
-            attributes.LabelElementsNumeric(graph.Vertices);
-            DrawGraph(graph, attributes);
+            VertexCoverPerformanceWindow generateVertexCoverWindow = new VertexCoverPerformanceWindow(performance);
+            generateVertexCoverWindow.ShowDialog();
         }
 
         private void AddTopVertex_Click(object sender, RoutedEventArgs e)
@@ -204,11 +186,47 @@ namespace VertexCover
             attributes.ColorElements(kernelized.Independents, Color.Green);
         }
 
-        private void PerformanceTestButton_Click(object sender, RoutedEventArgs e)
+        private void DisplayVertexCover(Graph graph, List<Vertex> vertexCover)
         {
+            if (vertexCover.IsEmpty())
+            {
+                VertexCoverOutput.Text = "No suitable vertex cover could be found";
+                return;
+            }
 
-            VertexCoverPerformanceWindow generateVertexCoverWindow = new VertexCoverPerformanceWindow(performance);
-            generateVertexCoverWindow.ShowDialog();
+            string edges = vertexCover.Aggregate("", (current, vertex) => current + (vertex.ID + " "));
+
+            attributes.Clear();
+            attributes.LabelElementsNumeric(graph.Vertices);
+            attributes.ColorElements(vertexCover, Color.Green);
+            attributes.ColorElements(graph.Edges, Color.Green);
+
+            VertexCoverOutput.Text = "Vertices: " + edges + "form biggest vertex cover for graph";
+            DrawGraph(graph, attributes);
+        }
+
+        private void DrawGraph(Graph graph, GraphVizAttributes attributes)
+        {
+            try
+            {
+                Uri location = GraphViz.CreateGraphImage($"graph{imagesGenerated++}", graph, attributes);
+                ImageBox.Source = new BitmapImage(location);
+            }
+            catch (Win32Exception)
+            {
+                MessageBox.Show("Please install GraphViz at C:\\Program Files\\Graphviz\\bin\\dot.exe");
+            }
+            catch (OutOfMemoryException)
+            {
+                MessageBox.Show("The maximum size has been reached please create a smaller graph");
+            }
+        }
+
+        private void GenerateDefaultGraph()
+        {
+            graph = new Graph(matrixBuilder.GenerateCompleteAdjacencyMatrix(5, 50));
+            attributes.LabelElementsNumeric(graph.Vertices);
+            DrawGraph(graph, attributes);
         }
     }
 }
